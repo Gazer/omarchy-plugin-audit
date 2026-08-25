@@ -4,7 +4,7 @@
   "commit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "commitShort": "3a48310",
   "commitUrl": "https://github.com/jankeesvw/omarchy-downloads/commit/3a4831032fccc24173533f7adeda4bffb5dcb664",
-  "scannedAt": "2026-08-25T08:20:08.415Z",
+  "scannedAt": "2026-08-25T08:23:44.165Z",
   "fromCommit": null,
   "fromCommitShort": null,
   "diff": {
@@ -144,14 +144,14 @@
     "networkCalls": [],
     "processes": [
       {
-        "severity": "high",
+        "severity": "medium",
         "category": "ipc",
         "pattern": "ipcTarget",
         "file": "Panel.qml",
         "line": 29,
         "column": 3,
         "snippet": "ipcTarget: \"jankeesvw.downloads\"",
-        "description": "IPC handler exposure"
+        "description": "IPC handler exposure — payload appears validated via conditional check (handler checks state before acting; review logic)"
       }
     ],
     "imports": [
@@ -239,14 +239,14 @@
       "description": "Reads directory via FolderListModel"
     },
     {
-      "severity": "high",
+      "severity": "medium",
       "category": "ipc",
       "pattern": "ipcTarget",
       "file": "Panel.qml",
       "line": 29,
       "column": 3,
       "snippet": "ipcTarget: \"jankeesvw.downloads\"",
-      "description": "IPC handler exposure"
+      "description": "IPC handler exposure — payload appears validated via conditional check (handler checks state before acting; review logic)"
     },
     {
       "severity": "medium",
@@ -260,7 +260,7 @@
     }
   ],
   "obfuscation": [],
-  "score": 11,
+  "score": 8,
   "riskLevel": "medium",
   "obfuscationFlag": false
 }

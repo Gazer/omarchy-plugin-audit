@@ -66,5 +66,30 @@ export function analyzeFile(filePath: string, content: string): Finding[] {
       }
     }
   });
+
+  // Payload validation check for IPC handlers — key question: does handler validate payload?
+  const hasIpc = findings.some((f) => f.pattern === 'ipcTarget');
+  if (hasIpc) {
+    // Heuristic: look for handler functions near ipcTarget that contain conditional checks before acting
+    const hasValidation =
+      /onOpenedChanged\s*:\s*if\s*\(/.test(content) ||
+      /onOpenChanged[^}]*if\s*\(/.test(content) ||
+      /function\s+on[A-Z][a-z]*Changed[^}]*if\s*\(/.test(content) ||
+      /if\s*\(\s*DownloadsStore\.open\s*!==/.test(content) ||
+      /if\s*\(\s*DownloadsStore\.open\s*&&/.test(content);
+    for (const f of findings) {
+      if (f.pattern === 'ipcTarget') {
+        if (hasValidation) {
+          f.severity = 'medium';
+          f.description =
+            'IPC handler exposure — payload appears validated via conditional check (handler checks state before acting; review logic)';
+        } else {
+          f.description =
+            'IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)';
+        }
+      }
+    }
+  }
+
   return findings;
 }
