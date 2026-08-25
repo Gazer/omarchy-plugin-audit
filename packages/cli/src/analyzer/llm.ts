@@ -98,7 +98,7 @@ export async function runLlmAnalysis(prompt: string, opts?: { model?: string; ti
   const timeoutMs = opts?.timeoutMs; // undefined = no timeout, wait as long as needed
 
   return new Promise((resolve, reject) => {
-    const args = ['run', '-m', model, '--format', 'json', prompt];
+    const args = ['run', '-m', model, '--format', 'json', '--auto', prompt];
     const child = spawn('opencode', args, {
       env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
     });
