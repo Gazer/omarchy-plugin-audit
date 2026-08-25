@@ -6,6 +6,7 @@ import { getRemoteHead, cloneAndDiff } from './git.js';
 import { readState, updateState } from './state.js';
 import { analyzeRepo } from './analyzer/index.js';
 import { ReportSchema } from './report.js';
+import { buildLlmPrompt, runLlmAnalysis, parseLlmResponse, collectFileContents } from './analyzer/llm.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -22,6 +23,8 @@ program
   .option('--list', 'List audited plugins')
   .option('--diff', 'Show diff only (since last scan)')
   .option('--keep-history <n>', 'Keep N historical reports', '10')
+  .option('--with-llm', 'Run AI review with opencode-go/muse-spark-1.2-contributor for deeper contextual analysis (requires opencode)')
+  .option('--llm-model <model>', 'LLM model for AI review', 'opencode-go/muse-spark-1.2-contributor')
   .action(async (url: string | undefined, opts) => {
     if (opts.list) {
       const state = await readState();
@@ -93,10 +96,39 @@ program
 
     console.log(`Cloning ${cleanUrl}...`);
     const { tmpDir, head: actualHead, filesChanged, commits } = await cloneAndDiff(cleanUrl, slug, last || null);
-    console.log(`Analyzing ${filesChanged.length} files...`);
+    console.log(`Analyzing ${filesChanged.length ? filesChanged.length : 'repository'} files...`);
     const analysis = await analyzeRepo(tmpDir, slug);
 
-    const report = {
+    let llmAnalysis: any = null;
+    if (opts.withLlm || opts.withLlm === true) {
+      console.log(pc.cyan(`Running AI review with ${opts.llmModel}...`));
+      try {
+        const fileContents = await collectFileContents(tmpDir, analysis.findings);
+        const prompt = buildLlmPrompt({
+          slug,
+          commit: actualHead,
+          fileTree: analysis.fileTree,
+          findings: analysis.findings,
+          fileContents,
+        });
+        const raw = await runLlmAnalysis(prompt, { model: opts.llmModel });
+        const parsedLlm = parseLlmResponse(raw);
+        llmAnalysis = {
+          model: opts.llmModel,
+          generatedAt: new Date().toISOString(),
+          overallRisk: parsedLlm.overallRisk,
+          summary: parsedLlm.summary,
+          findings: parsedLlm.findings,
+        };
+        console.log(pc.green(`AI review complete: ${llmAnalysis.overallRisk} — ${llmAnalysis.summary.slice(0, 120)}`));
+        // Use LLM refined risk to adjust overall risk if LLM finds higher risk
+        // Keep original static score but surface LLM overallRisk
+      } catch (e: any) {
+        console.error(pc.yellow(`AI review failed: ${e.message} — continuing with static analysis only`));
+      }
+    }
+
+    const report: any = {
       slug,
       url: cleanUrl,
       commit: actualHead,
@@ -121,6 +153,7 @@ program
       score: analysis.score,
       riskLevel: analysis.riskLevel,
       obfuscationFlag: analysis.obfuscationFlag,
+      llmAnalysis,
     };
 
     const parsed = ReportSchema.parse(report);

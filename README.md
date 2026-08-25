@@ -29,6 +29,8 @@ Options:
   --list             List audited plugins
   --diff             Show git diff since last scan without analyzing
   --keep-history <n> Keep N historical reports (default 10)
+  --with-llm         Run AI review with opencode-go/muse-spark-1.2-contributor for deeper contextual analysis (requires opencode)
+  --llm-model <model> LLM model for AI review (default: opencode-go/muse-spark-1.2-contributor)
   --help
 ```
 
@@ -49,6 +51,10 @@ node packages/cli/dist/index.js --list
 
 # JSON output for CI
 node packages/cli/dist/index.js https://github.com/jankeesvw/omarchy-downloads --json > report.json
+
+# Deep contextual analysis with AI (checks if Qt.resolvedUrl("mx-ctl") is actually an executable later used in Process)
+node packages/cli/dist/index.js https://github.com/gastonmira/omarchy-mx-master --with-llm
+node packages/cli/dist/index.js https://github.com/gastonmira/omarchy-mx-master --with-llm --force --dry-run  # preview without writing
 ```
 
 State is stored in `data/state.json` (versioned alongside reports). Each run writes `data/reports/<slug>.json` (snapshot overwrite) and `data/history/<slug>/<commit>.json` (keeps last 10).
@@ -58,11 +64,12 @@ State is stored in `data/state.json` (versioned alongside reports). Each run wri
 - **Operations summary:** file open (`FolderListModel`, `StandardPaths`, `File.read`), file writes
 - **Network calls:** `XmlHttpRequest`, `fetch`, `WebSocket`, `Qt.openUrlExternally`, remote `<img src>`
 - **Process execution:** `Process { command: ... }`, `Shell.exec`, `eval`, `Function`, `Loader`
-- **Imports/IPC:** `import Quickshell`, `ipcTarget`
+- **Imports/IPC:** `import Quickshell` (expected, info), `ipcTarget` (validated → medium, unvalidated → high)
 - **Obfuscation checks:** long base64, hex escapes, unicode escapes, minified lines, `eval` with dynamic strings, `fromCharCode`, remote URLs, binaries
 - **Scoring:** critical (10), high (5), medium (2), low (1), info (0) → risk `safe/low/medium/high/critical`; flag `Possible obfuscation` if ≥2 findings or any critical obfuscation
+- **AI review (optional --with-llm):** `opencode run -m opencode-go/muse-spark-1.2-contributor` analyzes each static finding in context — e.g., `Qt.resolvedUrl("mx-ctl")` flagged as `Resolves file URL` is re-evaluated as `resolves executable later used in statusProc.command = ["bash", "-c", "...", root.ctl, deviceName]` with refined severity and reasoning. Output in `llmAnalysis` (model, summary, per-finding refinedSeverity, isBenign, reasoning, relatedCode).
 
-Example: `jankeesvw/omarchy-downloads` scores `medium` (13) — no network/process, only `FolderListModel` + `StandardPaths` + `ipcTarget`.
+Example: `jankeesvw/omarchy-downloads` scores `medium` (8) — no network/process, only `FolderListModel` + `StandardPaths` + `ipcTarget` (validated) + expected imports separate.
 
 ## Site
 

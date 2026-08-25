@@ -5,5 +5,12 @@
     "lastScannedAt": "2026-08-25T08:23:44.165Z",
     "lastRisk": "medium",
     "lastScore": 8
+  },
+  "gastonmira-omarchy-mx-master": {
+    "url": "https://github.com/gastonmira/omarchy-mx-master",
+    "lastScanned": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
+    "lastScannedAt": "2026-08-25T08:30:03.593Z",
+    "lastRisk": "low",
+    "lastScore": 4
   }
 }

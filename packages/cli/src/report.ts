@@ -20,6 +20,29 @@ export const ObfuscationFindingSchema = z.object({
   severity: z.enum(['critical', 'high', 'medium', 'low']),
 });
 
+export const LlmFindingReviewSchema = z.object({
+  file: z.string(),
+  line: z.number(),
+  pattern: z.string(),
+  originalSeverity: z.string(),
+  refinedSeverity: z.enum(['critical', 'high', 'medium', 'low', 'info']),
+  isBenign: z.boolean(),
+  isMalicious: z.boolean(),
+  reasoning: z.string(),
+  relatedCode: z.string().optional(),
+  executableContext: z.string().optional(),
+});
+
+export const LlmAnalysisSchema = z
+  .object({
+    model: z.string(),
+    generatedAt: z.string(),
+    overallRisk: z.enum(['safe', 'low', 'medium', 'high', 'critical']),
+    summary: z.string(),
+    findings: z.array(LlmFindingReviewSchema),
+  })
+  .nullable();
+
 export const ReportSchema = z.object({
   slug: z.string(),
   url: z.string(),
@@ -53,8 +76,10 @@ export const ReportSchema = z.object({
   score: z.number(),
   riskLevel: z.enum(['safe', 'low', 'medium', 'high', 'critical']),
   obfuscationFlag: z.boolean(),
+  llmAnalysis: LlmAnalysisSchema.optional(),
 });
 
 export type Finding = z.infer<typeof FindingSchema>;
 export type ObfuscationFinding = z.infer<typeof ObfuscationFindingSchema>;
+export type LlmAnalysis = z.infer<typeof LlmAnalysisSchema>;
 export type Report = z.infer<typeof ReportSchema>;

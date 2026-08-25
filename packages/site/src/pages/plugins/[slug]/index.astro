@@ -5,6 +5,7 @@ import FindingsTable from '../../../components/FindingsTable.astro';
 import DiffView from '../../../components/DiffView.astro';
 import ObfuscationAlert from '../../../components/ObfuscationAlert.astro';
 import FileTree from '../../../components/FileTree.astro';
+import LlmAnalysis from '../../../components/LlmAnalysis.astro';
 
 export async function getStaticPaths() {
   const reports = await getReports();
@@ -40,6 +41,8 @@ const { report } = Astro.props;
   <p>Score: <strong>{report.score}</strong> — Risk: <strong>{report.riskLevel}</strong></p>
 
   <ObfuscationAlert flag={report.obfuscationFlag} findings={report.obfuscation} />
+
+  <LlmAnalysis llmAnalysis={report.llmAnalysis} />
 
   <h2>Operations Summary</h2>
   <p class="text-sm text-gray-600">Risk-relevant operations only (expected imports excluded, shown separately below).</p>
