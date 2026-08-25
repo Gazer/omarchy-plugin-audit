@@ -4,9 +4,7 @@
 
 Omarchy plugins are git repos that ship QML/Qt + JavaScript running inside your shell (Quickshell/Hyprland). That logic can open files, call the network, and execute processes — potentially malicious if not reviewed. This tool gives you a **semi-static report** (`Astro` site you can self-host) per plugin and commit, so you can decide before `omarchy update`.
 
-**All reports and pages are in English. CLI is in English.**
-
-Live example: `https://github.com/jankeesvw/omarchy-downloads` (bar widget that shows recent downloads, `FolderListModel` + `StandardPaths`, no network/process).
+Live example: https://opa.whitehatfactory.com/
 
 ---
 
