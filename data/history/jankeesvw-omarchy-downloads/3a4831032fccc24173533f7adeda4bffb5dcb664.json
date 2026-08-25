@@ -4,14 +4,80 @@
   "commit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "commitShort": "3a48310",
   "commitUrl": "https://github.com/jankeesvw/omarchy-downloads/commit/3a4831032fccc24173533f7adeda4bffb5dcb664",
-  "scannedAt": "2026-08-25T08:11:58.575Z",
-  "fromCommit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
-  "fromCommitShort": "3a48310",
+  "scannedAt": "2026-08-25T08:20:08.415Z",
+  "fromCommit": null,
+  "fromCommitShort": null,
   "diff": {
-    "filesChanged": [],
-    "commits": [],
+    "filesChanged": [
+      {
+        "status": "A",
+        "path": "DownloadRow.qml"
+      },
+      {
+        "status": "A",
+        "path": "DownloadsStore.qml"
+      },
+      {
+        "status": "A",
+        "path": "LICENSE"
+      },
+      {
+        "status": "A",
+        "path": "Panel.qml"
+      },
+      {
+        "status": "A",
+        "path": "README.md"
+      },
+      {
+        "status": "A",
+        "path": "manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "preview.png"
+      },
+      {
+        "status": "A",
+        "path": "qmldir"
+      },
+      {
+        "status": "A",
+        "path": "screenshots/light.png"
+      },
+      {
+        "status": "A",
+        "path": "screenshots/panel.png"
+      }
+    ],
+    "commits": [
+      {
+        "sha": "3a4831032fccc24173533f7adeda4bffb5dcb664",
+        "message": "Bound the folder read, and stop paying for a folder that keeps moving",
+        "author": "Jankees van Woezik",
+        "date": "2026-08-25T06:46:28+02:00"
+      },
+      {
+        "sha": "86274bf4e19b24937a3a9e9cb63a097ad3b7124f",
+        "message": "Add root preview.png for the marketplace listing card",
+        "author": "Jankees van Woezik",
+        "date": "2026-08-24T12:22:24+02:00"
+      },
+      {
+        "sha": "3a0607cf702f5ffd6735cc13ee22bb2238533f28",
+        "message": "Carry the drag from the row itself, and note the empty-workspace trap",
+        "author": "Jankees van Woezik",
+        "date": "2026-08-24T12:01:28+02:00"
+      },
+      {
+        "sha": "92f4a320a6fa8642930020181f74acfe030a2fd0",
+        "message": "Downloads widget: recent downloads in the bar, draggable from a window",
+        "author": "Jankees van Woezik",
+        "date": "2026-08-24T11:38:12+02:00"
+      }
+    ],
     "stats": {
-      "added": 0,
+      "added": 10,
       "modified": 0,
       "deleted": 0
     }
@@ -73,81 +139,10 @@
         "column": 46,
         "snippet": "folder !== \"\" ? Util.fileUrl(folder) : undefined)",
         "description": "Resolves file URL"
-      },
-      {
-        "severity": "medium",
-        "category": "fileOps",
-        "pattern": "File.read",
-        "file": "Panel.qml",
-        "line": 85,
-        "column": 53,
-        "snippet": "if (DownloadsStore.open && !root.opened) root.open()",
-        "description": "Reads file content"
       }
     ],
     "networkCalls": [],
-    "processes": [],
-    "imports": [
-      {
-        "severity": "info",
-        "category": "imports",
-        "pattern": "import Quickshell",
-        "file": "DownloadRow.qml",
-        "line": 3,
-        "column": 1,
-        "snippet": "import Quickshell",
-        "description": "Imports Quickshell module"
-      },
-      {
-        "severity": "info",
-        "category": "imports",
-        "pattern": "import qs",
-        "file": "DownloadRow.qml",
-        "line": 4,
-        "column": 1,
-        "snippet": "import qs.Commons",
-        "description": "Imports local qs module"
-      },
-      {
-        "severity": "info",
-        "category": "imports",
-        "pattern": "import Quickshell",
-        "file": "DownloadsStore.qml",
-        "line": 7,
-        "column": 1,
-        "snippet": "import Quickshell",
-        "description": "Imports Quickshell module"
-      },
-      {
-        "severity": "info",
-        "category": "imports",
-        "pattern": "import qs",
-        "file": "DownloadsStore.qml",
-        "line": 8,
-        "column": 1,
-        "snippet": "import qs.Commons",
-        "description": "Imports local qs module"
-      },
-      {
-        "severity": "info",
-        "category": "imports",
-        "pattern": "import Quickshell",
-        "file": "Panel.qml",
-        "line": 2,
-        "column": 1,
-        "snippet": "import Quickshell",
-        "description": "Imports Quickshell module"
-      },
-      {
-        "severity": "info",
-        "category": "imports",
-        "pattern": "import qs",
-        "file": "Panel.qml",
-        "line": 3,
-        "column": 1,
-        "snippet": "import qs.Commons",
-        "description": "Imports local qs module"
-      },
+    "processes": [
       {
         "severity": "high",
         "category": "ipc",
@@ -158,49 +153,71 @@
         "snippet": "ipcTarget: \"jankeesvw.downloads\"",
         "description": "IPC handler exposure"
       }
+    ],
+    "imports": [
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "DownloadRow.qml",
+        "line": 3,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "DownloadRow.qml",
+        "line": 4,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "DownloadsStore.qml",
+        "line": 7,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "DownloadsStore.qml",
+        "line": 8,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Panel.qml",
+        "line": 2,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "Panel.qml",
+        "line": 3,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      }
     ]
   },
   "findings": [
-    {
-      "severity": "info",
-      "category": "imports",
-      "pattern": "import Quickshell",
-      "file": "DownloadRow.qml",
-      "line": 3,
-      "column": 1,
-      "snippet": "import Quickshell",
-      "description": "Imports Quickshell module"
-    },
-    {
-      "severity": "info",
-      "category": "imports",
-      "pattern": "import qs",
-      "file": "DownloadRow.qml",
-      "line": 4,
-      "column": 1,
-      "snippet": "import qs.Commons",
-      "description": "Imports local qs module"
-    },
-    {
-      "severity": "info",
-      "category": "imports",
-      "pattern": "import Quickshell",
-      "file": "DownloadsStore.qml",
-      "line": 7,
-      "column": 1,
-      "snippet": "import Quickshell",
-      "description": "Imports Quickshell module"
-    },
-    {
-      "severity": "info",
-      "category": "imports",
-      "pattern": "import qs",
-      "file": "DownloadsStore.qml",
-      "line": 8,
-      "column": 1,
-      "snippet": "import qs.Commons",
-      "description": "Imports local qs module"
-    },
     {
       "severity": "medium",
       "category": "fileOps",
@@ -222,26 +239,6 @@
       "description": "Reads directory via FolderListModel"
     },
     {
-      "severity": "info",
-      "category": "imports",
-      "pattern": "import Quickshell",
-      "file": "Panel.qml",
-      "line": 2,
-      "column": 1,
-      "snippet": "import Quickshell",
-      "description": "Imports Quickshell module"
-    },
-    {
-      "severity": "info",
-      "category": "imports",
-      "pattern": "import qs",
-      "file": "Panel.qml",
-      "line": 3,
-      "column": 1,
-      "snippet": "import qs.Commons",
-      "description": "Imports local qs module"
-    },
-    {
       "severity": "high",
       "category": "ipc",
       "pattern": "ipcTarget",
@@ -260,20 +257,10 @@
       "column": 46,
       "snippet": "folder !== \"\" ? Util.fileUrl(folder) : undefined)",
       "description": "Resolves file URL"
-    },
-    {
-      "severity": "medium",
-      "category": "fileOps",
-      "pattern": "File.read",
-      "file": "Panel.qml",
-      "line": 85,
-      "column": 53,
-      "snippet": "if (DownloadsStore.open && !root.opened) root.open()",
-      "description": "Reads file content"
     }
   ],
   "obfuscation": [],
-  "score": 13,
+  "score": 11,
   "riskLevel": "medium",
   "obfuscationFlag": false
 }

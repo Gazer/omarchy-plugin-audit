@@ -42,8 +42,8 @@ const { report } = Astro.props;
   <ObfuscationAlert flag={report.obfuscationFlag} findings={report.obfuscation} />
 
   <h2>Operations Summary</h2>
-  <p class="text-sm text-gray-600">Inventory of operations detected (file, network, process, imports).</p>
-  <FindingsTable findings={report.findings} title="All Findings" />
+  <p class="text-sm text-gray-600">Risk-relevant operations only (expected imports excluded, shown separately below).</p>
+  <FindingsTable findings={report.findings} title="Risk-Relevant Findings" />
 
   <h2>Network Calls</h2>
   <FindingsTable findings={report.inventory.networkCalls} title="Network Calls" />
@@ -53,6 +53,10 @@ const { report } = Astro.props;
 
   <h2>Process Execution</h2>
   <FindingsTable findings={report.inventory.processes} title="Process Execution" />
+
+  <h2>Expected Imports</h2>
+  <p class="text-sm text-gray-600">Normal Quickshell / local module imports — expected for Omarchy plugins, not counted as risk (informational only).</p>
+  <FindingsTable findings={report.inventory.imports} title="Expected Imports" />
 
   <h2>Changed Files</h2>
   <DiffView files={report.diff.filesChanged} commits={report.diff.commits} />

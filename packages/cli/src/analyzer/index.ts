@@ -61,15 +61,19 @@ export async function analyzeRepo(tmpDir: string, _slug: string) {
     obfuscation.push({ type: 'binary', file: rel, line: 1, snippet: rel, severity: 'high' });
   }
 
+  // Inventory: separate expected imports (info, no risk) from risky operations
   const inventory = {
     fileOps: findings.filter((f) => f.category === 'fileOps' || f.category === 'fsWrite'),
     networkCalls: findings.filter((f) => f.category === 'network'),
-    processes: findings.filter((f) => f.category === 'exec'),
-    imports: findings.filter((f) => f.category === 'imports' || f.category === 'ipc'),
+    processes: findings.filter((f) => f.category === 'exec' || f.category === 'ipc'),
+    imports: findings.filter((f) => f.category === 'imports'),
   };
 
+  // Main findings for report: exclude expected imports (info) to reduce noise
+  const riskFindings = findings.filter((f) => f.severity !== 'info');
+
   const allForScoring = [
-    ...findings.map((f) => ({ severity: f.severity })),
+    ...riskFindings.map((f) => ({ severity: f.severity })),
     ...obfuscation.map((o) => ({ severity: o.severity })),
   ] as { severity: 'critical' | 'high' | 'medium' | 'low' | 'info' }[];
 
@@ -77,7 +81,7 @@ export async function analyzeRepo(tmpDir: string, _slug: string) {
   const obfuscationFlag = obfuscation.length >= 2 || obfuscation.some((o) => o.severity === 'critical');
 
   return {
-    findings,
+    findings: riskFindings,
     obfuscation,
     fileTree,
     inventory,

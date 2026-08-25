@@ -19,7 +19,7 @@ const patterns: {
   { regex: /FolderListModel/, pattern: 'FolderListModel', category: 'fileOps', severity: 'medium', description: 'Reads directory via FolderListModel' },
   { regex: /StandardPaths/, pattern: 'StandardPaths', category: 'fileOps', severity: 'medium', description: 'Accesses system paths via StandardPaths' },
   { regex: /Util\.fileUrl|Qt\.resolvedUrl/, pattern: 'Util.fileUrl', category: 'fileOps', severity: 'medium', description: 'Resolves file URL' },
-  { regex: /File\.read|readFile|open\(/, pattern: 'File.read', category: 'fileOps', severity: 'medium', description: 'Reads file content' },
+  { regex: /File\.read|readFile|\bopenFile\s*\(/, pattern: 'File.read', category: 'fileOps', severity: 'medium', description: 'Reads file content' },
   { regex: /XmlHttpRequest/, pattern: 'XmlHttpRequest', category: 'network', severity: 'high', description: 'Network request via XmlHttpRequest' },
   { regex: /\bfetch\s*\(/, pattern: 'fetch', category: 'network', severity: 'high', description: 'Network request via fetch' },
   { regex: /WebSocket/, pattern: 'WebSocket', category: 'network', severity: 'high', description: 'Network via WebSocket' },
@@ -33,8 +33,8 @@ const patterns: {
   { regex: /Qt\.createQmlObject|Qt\.createComponent/, pattern: 'Qt.createComponent', category: 'exec', severity: 'critical', description: 'Dynamic QML component creation' },
   { regex: /writeFile|FileIO\.write/, pattern: 'writeFile', category: 'fsWrite', severity: 'high', description: 'File write operation' },
   { regex: /copy\(|remove\(|\.remove/, pattern: 'fs-remove', category: 'fsWrite', severity: 'high', description: 'File remove/copy operation' },
-  { regex: /import\s+Quickshell/, pattern: 'import Quickshell', category: 'imports', severity: 'info', description: 'Imports Quickshell module' },
-  { regex: /import\s+qs\./, pattern: 'import qs', category: 'imports', severity: 'info', description: 'Imports local qs module' },
+  { regex: /import\s+Quickshell/, pattern: 'import Quickshell', category: 'imports', severity: 'info', description: 'Expected Quickshell import — normal for Omarchy plugins (no risk)' },
+  { regex: /import\s+qs\./, pattern: 'import qs', category: 'imports', severity: 'info', description: 'Expected local module import — normal for Omarchy plugins (no risk)' },
   { regex: /ipcTarget|IpcHandler/, pattern: 'ipcTarget', category: 'ipc', severity: 'high', description: 'IPC handler exposure' },
 ];
 
