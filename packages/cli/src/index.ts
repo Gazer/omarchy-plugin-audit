@@ -141,7 +141,7 @@ program
     }
 
     const installCommand = `omarchy plugin add ${cleanUrl}.git --enable`;
-    const installCommandPinned = `omarchy plugin add ${cleanUrl}.git --yes && git -C ~/.config/omarchy/plugins/${pluginId} checkout ${actualHead} && omarchy plugin enable ${pluginId} # audited commit ${actualHead.slice(0,7)}`;
+    const installCommandPinned = `omarchy plugin add ${cleanUrl}.git --yes && \\\n  git -C ~/.config/omarchy/plugins/${pluginId} checkout ${actualHead} && \\\n  omarchy plugin enable ${pluginId} # audited commit ${actualHead.slice(0,7)}`;
 
     const report: any = {
       slug,

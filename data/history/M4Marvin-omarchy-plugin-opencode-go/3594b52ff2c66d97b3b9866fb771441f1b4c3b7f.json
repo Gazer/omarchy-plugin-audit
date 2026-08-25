@@ -5,11 +5,11 @@
   "commit": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
   "commitShort": "3594b52",
   "commitUrl": "https://github.com/M4Marvin/omarchy-plugin-opencode-go/commit/3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
-  "scannedAt": "2026-08-25T10:29:59.906Z",
+  "scannedAt": "2026-08-25T10:38:46.139Z",
   "fromCommit": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
   "fromCommitShort": "3594b52",
   "installCommand": "omarchy plugin add https://github.com/M4Marvin/omarchy-plugin-opencode-go.git --enable",
-  "installCommandPinned": "omarchy plugin add https://github.com/M4Marvin/omarchy-plugin-opencode-go.git --yes && git -C ~/.config/omarchy/plugins/local.opencode-go checkout 3594b52ff2c66d97b3b9866fb771441f1b4c3b7f && omarchy plugin enable local.opencode-go # audited commit 3594b52",
+  "installCommandPinned": "omarchy plugin add https://github.com/M4Marvin/omarchy-plugin-opencode-go.git --yes && \\\n  git -C ~/.config/omarchy/plugins/local.opencode-go checkout 3594b52ff2c66d97b3b9866fb771441f1b4c3b7f && \\\n  omarchy plugin enable local.opencode-go # audited commit 3594b52",
   "diff": {
     "filesChanged": [],
     "commits": [],

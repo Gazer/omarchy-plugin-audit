@@ -5,11 +5,11 @@
   "commit": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
   "commitShort": "1dcdbf7",
   "commitUrl": "https://github.com/niraletter/vitals/commit/1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
-  "scannedAt": "2026-08-25T10:30:02.607Z",
+  "scannedAt": "2026-08-25T10:38:48.521Z",
   "fromCommit": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
   "fromCommitShort": "1dcdbf7",
   "installCommand": "omarchy plugin add https://github.com/niraletter/vitals.git --enable",
-  "installCommandPinned": "omarchy plugin add https://github.com/niraletter/vitals.git --yes && git -C ~/.config/omarchy/plugins/vitals checkout 1dcdbf754d9c35005afa5fbe58a0a261e8fe279f && omarchy plugin enable vitals # audited commit 1dcdbf7",
+  "installCommandPinned": "omarchy plugin add https://github.com/niraletter/vitals.git --yes && \\\n  git -C ~/.config/omarchy/plugins/vitals checkout 1dcdbf754d9c35005afa5fbe58a0a261e8fe279f && \\\n  omarchy plugin enable vitals # audited commit 1dcdbf7",
   "diff": {
     "filesChanged": [],
     "commits": [],

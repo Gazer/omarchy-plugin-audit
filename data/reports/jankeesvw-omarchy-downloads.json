@@ -5,11 +5,11 @@
   "commit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "commitShort": "3a48310",
   "commitUrl": "https://github.com/jankeesvw/omarchy-downloads/commit/3a4831032fccc24173533f7adeda4bffb5dcb664",
-  "scannedAt": "2026-08-25T10:29:55.138Z",
+  "scannedAt": "2026-08-25T10:38:41.868Z",
   "fromCommit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "fromCommitShort": "3a48310",
   "installCommand": "omarchy plugin add https://github.com/jankeesvw/omarchy-downloads.git --enable",
-  "installCommandPinned": "omarchy plugin add https://github.com/jankeesvw/omarchy-downloads.git --yes && git -C ~/.config/omarchy/plugins/jankeesvw.downloads checkout 3a4831032fccc24173533f7adeda4bffb5dcb664 && omarchy plugin enable jankeesvw.downloads # audited commit 3a48310",
+  "installCommandPinned": "omarchy plugin add https://github.com/jankeesvw/omarchy-downloads.git --yes && \\\n  git -C ~/.config/omarchy/plugins/jankeesvw.downloads checkout 3a4831032fccc24173533f7adeda4bffb5dcb664 && \\\n  omarchy plugin enable jankeesvw.downloads # audited commit 3a48310",
   "diff": {
     "filesChanged": [],
     "commits": [],
