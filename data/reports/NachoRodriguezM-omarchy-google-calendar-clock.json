@@ -5,11 +5,11 @@
   "commit": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
   "commitShort": "14cf448",
   "commitUrl": "https://github.com/NachoRodriguezM/omarchy-google-calendar-clock/commit/14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
-  "scannedAt": "2026-08-25T10:25:48.967Z",
+  "scannedAt": "2026-08-25T10:30:04.931Z",
   "fromCommit": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
   "fromCommitShort": "14cf448",
   "installCommand": "omarchy plugin add https://github.com/NachoRodriguezM/omarchy-google-calendar-clock.git --enable",
-  "installCommandPinned": "omarchy plugin add https://github.com/NachoRodriguezM/omarchy-google-calendar-clock.git --enable --yes && git -C ~/.config/omarchy/plugins/omarchy-google-calendar-clock checkout 14cf4489cc5dbb26871d9cd05acfa369da1f9dde # audited commit 14cf448",
+  "installCommandPinned": "omarchy plugin add https://github.com/NachoRodriguezM/omarchy-google-calendar-clock.git --yes && git -C ~/.config/omarchy/plugins/omarchy-google-calendar-clock checkout 14cf4489cc5dbb26871d9cd05acfa369da1f9dde && omarchy plugin enable omarchy-google-calendar-clock # audited commit 14cf448",
   "diff": {
     "filesChanged": [],
     "commits": [],

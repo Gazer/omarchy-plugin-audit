@@ -5,11 +5,11 @@
   "commit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "commitShort": "6d9184a",
   "commitUrl": "https://github.com/gastonmira/omarchy-mx-master/commit/6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-  "scannedAt": "2026-08-25T10:26:08.054Z",
+  "scannedAt": "2026-08-25T10:29:57.625Z",
   "fromCommit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "fromCommitShort": "6d9184a",
   "installCommand": "omarchy plugin add https://github.com/gastonmira/omarchy-mx-master.git --enable",
-  "installCommandPinned": "omarchy plugin add https://github.com/gastonmira/omarchy-mx-master.git --enable --yes && git -C ~/.config/omarchy/plugins/mxmaster.panel checkout 6d9184ada0a17e2c71dacbe1889c2e255d5887c1 # audited commit 6d9184a",
+  "installCommandPinned": "omarchy plugin add https://github.com/gastonmira/omarchy-mx-master.git --yes && git -C ~/.config/omarchy/plugins/mxmaster.panel checkout 6d9184ada0a17e2c71dacbe1889c2e255d5887c1 && omarchy plugin enable mxmaster.panel # audited commit 6d9184a",
   "diff": {
     "filesChanged": [],
     "commits": [],
