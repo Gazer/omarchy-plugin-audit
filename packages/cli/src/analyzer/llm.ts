@@ -95,7 +95,7 @@ Be precise, reference relatedCode lines if you find usage elsewhere. If you cann
 
 export async function runLlmAnalysis(prompt: string, opts?: { model?: string; timeoutMs?: number }): Promise<string> {
   const model = opts?.model || MODEL;
-  const timeoutMs = opts?.timeoutMs || 120_000;
+  const timeoutMs = opts?.timeoutMs; // undefined = no timeout, wait as long as needed
 
   return new Promise((resolve, reject) => {
     const args = ['run', '-m', model, '--format', 'json', prompt];
@@ -105,25 +105,25 @@ export async function runLlmAnalysis(prompt: string, opts?: { model?: string; ti
 
     let stdout = '';
     let stderr = '';
-    let timedOut = false;
 
-    const timer = setTimeout(() => {
-      timedOut = true;
-      child.kill('SIGTERM');
-      reject(new Error(`LLM analysis timed out after ${timeoutMs}ms`));
-    }, timeoutMs);
+    let timer: NodeJS.Timeout | undefined;
+    if (timeoutMs) {
+      timer = setTimeout(() => {
+        child.kill('SIGTERM');
+        reject(new Error(`LLM analysis timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
+    }
 
     child.stdout.on('data', (d) => (stdout += d.toString()));
     child.stderr.on('data', (d) => (stderr += d.toString()));
 
     child.on('error', (err) => {
-      clearTimeout(timer);
+      if (timer) clearTimeout(timer);
       reject(err);
     });
 
     child.on('close', (code) => {
-      clearTimeout(timer);
-      if (timedOut) return;
+      if (timer) clearTimeout(timer);
       if (code !== 0 && !stdout) {
         reject(new Error(`opencode run failed (exit ${code}): ${stderr.slice(0, 500)}`));
         return;
