@@ -1,8 +1,9 @@
 # Design Spec: Omarchy Plugin Audit — CLI + Reporte Astro
 
 **Fecha:** 2026-08-25
-**Estado:** Draft aprobado (secciones 1-6 validadas)
+**Estado:** Draft aprobado (secciones 1-6 validadas, + clarificación idioma 2026-08-25)
 **Decisión arquitectónica:** Monorepo Node + Astro integrado (Enfoque A)
+**Language constraint:** All user-facing outputs MUST be in English — CLI help/messages/errors, report JSON `description` fields, Astro pages (titles, labels, badges, tables). Code comments may be English. Conversation may be Spanish, artifacts English.
 
 ---
 
@@ -105,15 +106,17 @@ omarchy_plugin_summary/  (root)
 
 ```bash
 pnpm audit https://github.com/jankeesvw/omarchy-downloads
-# o binario: omarchy-audit <url> [options]
+# or binary: omarchy-audit <url> [options]
 
-Options:
-  --force         Re-escanea aunque HEAD == lastScanned
-  --json          Output JSON a stdout (para CI)
-  --dry-run       Muestra diff sin escribir reporte
-  --list          Lista plugins auditados (lee state.json)
-  --diff <url>    Solo muestra git diff desde último escaneado, sin analizar
-  --keep-history N  Mantiene N históricos (default 10)
+Options (English):
+  --force         Re-scan even if HEAD == lastScanned
+  --json          Output JSON to stdout (for CI)
+  --dry-run       Show diff without writing report
+  --list          List audited plugins (reads state.json)
+  --diff <url>    Show git diff since last scan without analyzing
+  --keep-history N  Keep N historical reports (default 10)
+
+All CLI help, logs and errors in English.
 ```
 
 URL parsing: `https://github.com/<owner>/<repo>(.git)?(#branch)?` → slug `<owner>-<repo>` (ej. `jankeesvw-omarchy-downloads`). Soporta `git@github.com:owner/repo.git`.
@@ -167,7 +170,7 @@ Scoring: suma ponderada. `riskLevel`:
 - `high` 20-34
 - `critical` 35+ o cualquier `critical` finding
 
-Findings: `{ severity, category, pattern, file, line, column, snippet (≤120 chars), description }`.
+Findings: `{ severity, category, pattern, file, line, column, snippet (≤120 chars), description }` — `description` in English (e.g., `"Process execution via Quickshell Process"`).
 
 ### 4.2 File Tree
 
@@ -231,14 +234,14 @@ type Report = {
 
 Validación `zod` en CLI antes de escribir.
 
-### 6.2 Astro
+### 6.2 Astro (All UI in English)
 
-- `astro.config.mjs`: `output: "static"`, `adapter` no necesario para Cloudflare static (o `@astrojs/cloudflare` si SSR no).
-- `src/pages/index.astro`: lee `data/state.json` + `data/reports/*.json`, tabla con columns: plugin, último commit (link), fecha, risk badge (color), score, link a `/plugins/<slug>/`.
-- `src/pages/plugins/[slug]/index.astro`: `getStaticPaths` de `data/reports/*.json`, renderiza reporte snapshot. Componentes: `RiskBadge`, `FindingsTable` (filtrable por severidad), `DiffView` (lista archivos cambiados), `ObfuscationAlert`, `FileTree`.
-- `src/pages/plugins/[slug]/[commit].astro`: histórico, `getStaticPaths` de `data/history/*/*.json`.
-- Estilo: minimal, sin JS pesado, tablas con severidad colores (safe=gris, low=verde, medium=amarillo, high=naranja, critical=rojo).
-- Cada página muestra header con commit hash linkeado a GitHub + badge riesgo + timestamp.
+- `astro.config.mjs`: `output: "static"`, no adapter needed for Cloudflare static (or `@astrojs/cloudflare` if needed).
+- `src/pages/index.astro`: reads `data/state.json` + `data/reports/*.json`, table columns: `Plugin`, `Last commit` (link), `Scanned`, `Risk` badge (color), `Score`, `View report` link to `/plugins/<slug>/`. Page title: `Omarchy Plugin Audit — Overview`.
+- `src/pages/plugins/[slug]/index.astro`: `getStaticPaths` from `data/reports/*.json`, renders snapshot report. Components: `RiskBadge`, `FindingsTable` (filterable by severity), `DiffView` (changed files since last scan), `ObfuscationAlert`, `FileTree`. Section headers in English: `Changed files since <commit>`, `Operations Summary`, `Network Calls`, `Files Opened`, `Findings`, `Obfuscation Check`, `File Tree`.
+- `src/pages/plugins/[slug]/[commit].astro`: historical, `getStaticPaths` from `data/history/*/*.json`. Title: `Report for <slug> @ <commitShort>`.
+- Style: minimal, no heavy JS, severity colors (safe=gray, low=green, medium=yellow, high=orange, critical=red).
+- Each page header shows commit hash linked to GitHub + risk badge + timestamp. All labels, empty states, and tooltips in English.
 
 ### 6.3 Deploy Cloudflare
 
@@ -248,15 +251,15 @@ Validación `zod` en CLI antes de escribir.
 
 ---
 
-## 7. Error Handling
+## 7. Error Handling (English messages)
 
-- `git ls-remote` falla: "No se pudo alcanzar <url> — verifica URL o acceso red" (exit 1).
-- Repo privado sin auth: detecta `403/401` en ls-remote, sugiere `GH_TOKEN`.
-- `state.json` corrupto: backup a `state.json.bak`, recrea vacío, warning.
-- `data/reports/<slug>.json` inválido (zod fail): no lo lee Astro, muestra "reporte corrupto" y ofrece re-scan.
-- QML no parseable: fallback a regex line-by-line, no crashea.
-- Clone shallow insuficiente (lastScanned no en history): `git fetch --unshallow` o `--depth 1000` retry, luego full clone.
-- Tmp lleno: error con path y sugerencia `--tmp-dir`.
+- `git ls-remote` fails: `"Failed to reach <url> — check URL or network access"` (exit 1).
+- Private repo without auth: detect `403/401` in ls-remote, suggest `GH_TOKEN`.
+- `state.json` corrupt: backup to `state.json.bak`, recreate empty, warn `"State file corrupt, backed up and recreated"`.
+- `data/reports/<slug>.json` invalid (zod fail): Astro skips, shows `"Corrupt report"` and suggests re-scan.
+- QML not parseable: fallback to regex line-by-line, no crash.
+- Shallow clone insufficient (lastScanned not in history): `git fetch --unshallow` or `--depth 1000` retry, then full clone.
+- Tmp full: error with path and suggestion `--tmp-dir`.
 
 ---
 
