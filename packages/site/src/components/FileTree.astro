@@ -1,0 +1,27 @@
+---
+const { files = [] } = Astro.props;
+---
+<div class="my-4">
+  <h3 class="text-lg font-semibold mb-2">File Tree ({files.length} files)</h3>
+  {files.length === 0 ? (
+    <p class="text-gray-500 text-sm">No files.</p>
+  ) : (
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm border">
+        <thead class="bg-gray-100">
+          <tr><th class="px-3 py-2 text-left border">Path</th><th class="px-3 py-2 text-left border">Type</th><th class="px-3 py-2 text-left border">Lines</th><th class="px-3 py-2 text-left border">Size</th></tr>
+        </thead>
+        <tbody>
+          {files.map((f: any) => (
+            <tr class="border-t">
+              <td class="px-3 py-1 border font-mono text-xs">{f.path}</td>
+              <td class="px-3 py-1 border">{f.type}</td>
+              <td class="px-3 py-1 border">{f.lines}</td>
+              <td class="px-3 py-1 border">{f.size}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>

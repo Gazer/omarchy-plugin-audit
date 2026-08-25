@@ -1,0 +1,26 @@
+---
+const { flag, findings = [] } = Astro.props;
+---
+{flag ? (
+  <div class="bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded my-4">
+    <p class="font-bold">Flag: Possible obfuscation detected!</p>
+    <p class="text-sm">{findings.length} obfuscation findings — review carefully before updating.</p>
+  </div>
+) : (
+  <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded my-4">
+    <p class="text-sm">No obfuscation detected.</p>
+  </div>
+)}
+{findings.length > 0 && (
+  <div class="my-4">
+    <h3 class="text-lg font-semibold mb-2">Obfuscation Check ({findings.length})</h3>
+    <table class="min-w-full text-sm border">
+      <thead class="bg-gray-100"><tr><th class="px-3 py-2 text-left border">Type</th><th class="px-3 py-2 text-left border">Severity</th><th class="px-3 py-2 text-left border">File</th><th class="px-3 py-2 text-left border">Line</th><th class="px-3 py-2 text-left border">Snippet</th><th class="px-3 py-2 text-left border">Preview</th></tr></thead>
+      <tbody>
+        {findings.map((f: any) => (
+          <tr class="border-t"><td class="px-3 py-1 border">{f.type}</td><td class="px-3 py-1 border">{f.severity}</td><td class="px-3 py-1 border font-mono text-xs">{f.file}</td><td class="px-3 py-1 border">{f.line}</td><td class="px-3 py-1 border font-mono text-xs truncate max-w-[250px]">{f.snippet}</td><td class="px-3 py-1 border font-mono text-xs">{f.decodedPreview || ''}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}

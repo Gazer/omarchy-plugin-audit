@@ -1,0 +1,77 @@
+---
+import { getReports } from '../utils/reports.ts';
+import RiskBadge from '../components/RiskBadge.astro';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+let reports: any[] = [];
+try {
+  reports = await getReports();
+} catch {}
+
+let state: any = {};
+try {
+  const candidates = [
+    path.resolve(process.cwd(), '../../data/state.json'),
+    path.resolve(process.cwd(), 'data/state.json'),
+  ];
+  for (const c of candidates) {
+    try {
+      state = JSON.parse(await fs.readFile(c, 'utf8'));
+      break;
+    } catch {}
+  }
+} catch {}
+---
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Omarchy Plugin Audit — Overview</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; color: #111; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+    th { background: #f5f5f5; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Omarchy Plugin Audit — Overview</h1>
+  <p class="text-sm text-gray-600">Static audit reports for Omarchy plugins. Each report shows operations, network calls, files opened, and obfuscation checks for the last scanned commit.</p>
+
+  {reports.length === 0 ? (
+    <p>No reports yet. Run <code>omarchy-audit &lt;github-url&gt;</code> to generate one.</p>
+  ) : (
+    <table>
+      <thead>
+        <tr><th>Plugin</th><th>Last commit</th><th>Scanned</th><th>Risk</th><th>Score</th><th>View</th></tr>
+      </thead>
+      <tbody>
+        {reports.map((r) => (
+          <tr>
+            <td class="font-mono text-sm">{r.slug}</td>
+            <td><a href={r.commitUrl} target="_blank" rel="noopener">{r.commitShort}</a></td>
+            <td class="text-sm">{new Date(r.scannedAt).toLocaleString()}</td>
+            <td><RiskBadge level={r.riskLevel} /></td>
+            <td>{r.score}</td>
+            <td><a href={`/plugins/${r.slug}/`}>View report</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+
+  {Object.keys(state).length > 0 && (
+    <>
+      <h2 class="mt-8">Tracked Plugins</h2>
+      <ul class="text-sm">
+        {Object.entries(state).map(([slug, entry]: any) => (
+          <li>{slug} — {entry.lastScanned.slice(0,7)} ({entry.lastRisk}) — <a href={entry.url}>{entry.url}</a></li>
+        ))}
+      </ul>
+    </>
+  )}
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "@omarchy-audit/site",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "astro build",
+    "dev": "astro dev --host",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.16.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

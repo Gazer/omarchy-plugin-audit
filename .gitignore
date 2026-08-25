@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+packages/site/dist
+packages/cli/dist
+tmp
+/tmp/omarchy-audit
+# data/reports, history and state are versioned as reports (see spec)
+# uncomment to ignore locally:
+# data/reports/*.json
+# data/history/
+# data/state.json

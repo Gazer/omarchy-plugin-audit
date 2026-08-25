@@ -1,0 +1,26 @@
+{
+  "name": "@omarchy-audit/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "omarchy-audit": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "simple-git": "^3.20.0",
+    "fast-glob": "^3.3.2",
+    "zod": "^3.23.8",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "vitest": "^1.6.0",
+    "tsx": "^4.19.0",
+    "@types/node": "^20.12.0"
+  }
+}

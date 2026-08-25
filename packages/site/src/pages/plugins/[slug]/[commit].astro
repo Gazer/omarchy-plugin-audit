@@ -1,0 +1,59 @@
+---
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import RiskBadge from '../../../components/RiskBadge.astro';
+import FindingsTable from '../../../components/FindingsTable.astro';
+import DiffView from '../../../components/DiffView.astro';
+import ObfuscationAlert from '../../../components/ObfuscationAlert.astro';
+import FileTree from '../../../components/FileTree.astro';
+
+export async function getStaticPaths() {
+  const candidates = [
+    path.resolve(process.cwd(), '../../data/history'),
+    path.resolve(process.cwd(), 'data/history'),
+  ];
+  let base = candidates[0];
+  for (const c of candidates) {
+    try { await fs.readdir(c); base = c; break; } catch {}
+  }
+  let slugs: string[] = [];
+  try { slugs = await fs.readdir(base); } catch { return []; }
+  const paths: any[] = [];
+  for (const slug of slugs) {
+    let files: string[] = [];
+    try { files = await fs.readdir(path.join(base, slug)); } catch { continue; }
+    for (const f of files.filter(x => x.endsWith('.json'))) {
+      const commit = f.replace('.json','');
+      const raw = await fs.readFile(path.join(base, slug, f), 'utf8');
+      const report = JSON.parse(raw);
+      paths.push({ params: { slug, commit }, props: { report } });
+    }
+  }
+  return paths;
+}
+
+const { report } = Astro.props;
+---
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Report for {report.slug} @ {report.commitShort} — History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <a href={`/plugins/${report.slug}/`}>← Back to latest report</a> | <a href="/">Overview</a>
+  <h1>{report.slug} @ {report.commitShort} <RiskBadge level={report.riskLevel} /></h1>
+  <p>Commit: <a href={report.commitUrl} target="_blank">{report.commit}</a> — Scanned: {new Date(report.scannedAt).toLocaleString()}</p>
+  <ObfuscationAlert flag={report.obfuscationFlag} findings={report.obfuscation} />
+  <h2>Operations Summary</h2>
+  <FindingsTable findings={report.findings} title="All Findings" />
+  <h2>Changed Files</h2>
+  <DiffView files={report.diff.filesChanged} commits={report.diff.commits} />
+  <h2>File Tree</h2>
+  <FileTree files={report.fileTree} />
+</body>
+</html>

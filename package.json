@@ -1,0 +1,16 @@
+{
+  "name": "omarchy-plugin-audit",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "pnpm -r build",
+    "audit": "pnpm --filter @omarchy-audit/cli exec omarchy-audit",
+    "test": "pnpm -r test",
+    "site:build": "pnpm --filter @omarchy-audit/site build",
+    "site:dev": "pnpm --filter @omarchy-audit/site dev",
+    "deploy": "pnpm --filter @omarchy-audit/site build && npx wrangler pages publish dist --project-name=omarchy-plugin-audit",
+    "preview:site": "pnpm --filter @omarchy-audit/site preview"
+  }
+}

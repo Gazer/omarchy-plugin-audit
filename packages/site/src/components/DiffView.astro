@@ -1,0 +1,26 @@
+---
+const { files = [], commits = [] } = Astro.props;
+const statusLabel: Record<string, string> = { A: 'Added', M: 'Modified', D: 'Deleted', R: 'Renamed' };
+---
+<div class="my-4">
+  <h3 class="text-lg font-semibold mb-2">Changed Files ({files.length})</h3>
+  {files.length === 0 ? (
+    <p class="text-gray-500 text-sm">No changes detected (first scan).</p>
+  ) : (
+    <ul class="list-disc pl-5 text-sm font-mono">
+      {files.map((f: any) => (
+        <li><span class="font-semibold">{statusLabel[f.status] || f.status}</span> — {f.path}</li>
+      ))}
+    </ul>
+  )}
+  {commits.length > 0 && (
+    <>
+      <h4 class="text-md font-semibold mt-4 mb-2">Commits ({commits.length})</h4>
+      <ul class="text-sm">
+        {commits.map((c: any) => (
+          <li class="border-b py-1"><span class="font-mono text-xs">{c.sha.slice(0,7)}</span> — <span class="font-medium">{c.message}</span> <span class="text-gray-500">by {c.author} on {c.date}</span></li>
+        ))}
+      </ul>
+    </>
+  )}
+</div>

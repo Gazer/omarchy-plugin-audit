@@ -1,0 +1,45 @@
+---
+const { findings = [], title = "Findings" } = Astro.props;
+const severityColor: Record<string, string> = {
+  critical: 'text-red-600 font-bold',
+  high: 'text-orange-600',
+  medium: 'text-yellow-700',
+  low: 'text-green-600',
+  info: 'text-gray-500',
+};
+---
+<div class="my-4">
+  <h3 class="text-lg font-semibold mb-2">{title} ({findings.length})</h3>
+  {findings.length === 0 ? (
+    <p class="text-gray-500 text-sm">No findings.</p>
+  ) : (
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm border">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-3 py-2 text-left border">Severity</th>
+            <th class="px-3 py-2 text-left border">Category</th>
+            <th class="px-3 py-2 text-left border">Pattern</th>
+            <th class="px-3 py-2 text-left border">File</th>
+            <th class="px-3 py-2 text-left border">Line</th>
+            <th class="px-3 py-2 text-left border">Description</th>
+            <th class="px-3 py-2 text-left border">Snippet</th>
+          </tr>
+        </thead>
+        <tbody>
+          {findings.map((f: any) => (
+            <tr class="border-t hover:bg-gray-50">
+              <td class={`px-3 py-1 border ${severityColor[f.severity] || ''}`}>{f.severity}</td>
+              <td class="px-3 py-1 border">{f.category}</td>
+              <td class="px-3 py-1 border font-mono text-xs">{f.pattern}</td>
+              <td class="px-3 py-1 border font-mono text-xs">{f.file}</td>
+              <td class="px-3 py-1 border">{f.line}</td>
+              <td class="px-3 py-1 border">{f.description}</td>
+              <td class="px-3 py-1 border font-mono text-xs truncate max-w-[300px]">{f.snippet}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>

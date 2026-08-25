@@ -1,0 +1,279 @@
+{
+  "slug": "jankeesvw-omarchy-downloads",
+  "url": "https://github.com/jankeesvw/omarchy-downloads",
+  "commit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
+  "commitShort": "3a48310",
+  "commitUrl": "https://github.com/jankeesvw/omarchy-downloads/commit/3a4831032fccc24173533f7adeda4bffb5dcb664",
+  "scannedAt": "2026-08-25T08:11:58.575Z",
+  "fromCommit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
+  "fromCommitShort": "3a48310",
+  "diff": {
+    "filesChanged": [],
+    "commits": [],
+    "stats": {
+      "added": 0,
+      "modified": 0,
+      "deleted": 0
+    }
+  },
+  "fileTree": [
+    {
+      "path": "DownloadRow.qml",
+      "lines": 170,
+      "size": 7045,
+      "type": "qml"
+    },
+    {
+      "path": "DownloadsStore.qml",
+      "lines": 481,
+      "size": 18716,
+      "type": "qml"
+    },
+    {
+      "path": "Panel.qml",
+      "lines": 145,
+      "size": 5895,
+      "type": "qml"
+    },
+    {
+      "path": "manifest.json",
+      "lines": 24,
+      "size": 608,
+      "type": "json"
+    }
+  ],
+  "inventory": {
+    "fileOps": [
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "StandardPaths",
+        "file": "DownloadsStore.qml",
+        "line": 34,
+        "column": 27,
+        "snippet": "property url folderUrl: StandardPaths.writableLocation(StandardPaths.DownloadLocation)",
+        "description": "Accesses system paths via StandardPaths"
+      },
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "FolderListModel",
+        "file": "DownloadsStore.qml",
+        "line": 224,
+        "column": 66,
+        "snippet": "if (String(root.scanFolder) === \"\" || folderModel.status !== FolderListModel.Ready) return",
+        "description": "Reads directory via FolderListModel"
+      },
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "Panel.qml",
+        "line": 69,
+        "column": 46,
+        "snippet": "folder !== \"\" ? Util.fileUrl(folder) : undefined)",
+        "description": "Resolves file URL"
+      },
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "File.read",
+        "file": "Panel.qml",
+        "line": 85,
+        "column": 53,
+        "snippet": "if (DownloadsStore.open && !root.opened) root.open()",
+        "description": "Reads file content"
+      }
+    ],
+    "networkCalls": [],
+    "processes": [],
+    "imports": [
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "DownloadRow.qml",
+        "line": 3,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Imports Quickshell module"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "DownloadRow.qml",
+        "line": 4,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Imports local qs module"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "DownloadsStore.qml",
+        "line": 7,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Imports Quickshell module"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "DownloadsStore.qml",
+        "line": 8,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Imports local qs module"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Panel.qml",
+        "line": 2,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Imports Quickshell module"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "Panel.qml",
+        "line": 3,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Imports local qs module"
+      },
+      {
+        "severity": "high",
+        "category": "ipc",
+        "pattern": "ipcTarget",
+        "file": "Panel.qml",
+        "line": 29,
+        "column": 3,
+        "snippet": "ipcTarget: \"jankeesvw.downloads\"",
+        "description": "IPC handler exposure"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "category": "imports",
+      "pattern": "import Quickshell",
+      "file": "DownloadRow.qml",
+      "line": 3,
+      "column": 1,
+      "snippet": "import Quickshell",
+      "description": "Imports Quickshell module"
+    },
+    {
+      "severity": "info",
+      "category": "imports",
+      "pattern": "import qs",
+      "file": "DownloadRow.qml",
+      "line": 4,
+      "column": 1,
+      "snippet": "import qs.Commons",
+      "description": "Imports local qs module"
+    },
+    {
+      "severity": "info",
+      "category": "imports",
+      "pattern": "import Quickshell",
+      "file": "DownloadsStore.qml",
+      "line": 7,
+      "column": 1,
+      "snippet": "import Quickshell",
+      "description": "Imports Quickshell module"
+    },
+    {
+      "severity": "info",
+      "category": "imports",
+      "pattern": "import qs",
+      "file": "DownloadsStore.qml",
+      "line": 8,
+      "column": 1,
+      "snippet": "import qs.Commons",
+      "description": "Imports local qs module"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "StandardPaths",
+      "file": "DownloadsStore.qml",
+      "line": 34,
+      "column": 27,
+      "snippet": "property url folderUrl: StandardPaths.writableLocation(StandardPaths.DownloadLocation)",
+      "description": "Accesses system paths via StandardPaths"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "FolderListModel",
+      "file": "DownloadsStore.qml",
+      "line": 224,
+      "column": 66,
+      "snippet": "if (String(root.scanFolder) === \"\" || folderModel.status !== FolderListModel.Ready) return",
+      "description": "Reads directory via FolderListModel"
+    },
+    {
+      "severity": "info",
+      "category": "imports",
+      "pattern": "import Quickshell",
+      "file": "Panel.qml",
+      "line": 2,
+      "column": 1,
+      "snippet": "import Quickshell",
+      "description": "Imports Quickshell module"
+    },
+    {
+      "severity": "info",
+      "category": "imports",
+      "pattern": "import qs",
+      "file": "Panel.qml",
+      "line": 3,
+      "column": 1,
+      "snippet": "import qs.Commons",
+      "description": "Imports local qs module"
+    },
+    {
+      "severity": "high",
+      "category": "ipc",
+      "pattern": "ipcTarget",
+      "file": "Panel.qml",
+      "line": 29,
+      "column": 3,
+      "snippet": "ipcTarget: \"jankeesvw.downloads\"",
+      "description": "IPC handler exposure"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "Panel.qml",
+      "line": 69,
+      "column": 46,
+      "snippet": "folder !== \"\" ? Util.fileUrl(folder) : undefined)",
+      "description": "Resolves file URL"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "File.read",
+      "file": "Panel.qml",
+      "line": 85,
+      "column": 53,
+      "snippet": "if (DownloadsStore.open && !root.opened) root.open()",
+      "description": "Reads file content"
+    }
+  ],
+  "obfuscation": [],
+  "score": 13,
+  "riskLevel": "medium",
+  "obfuscationFlag": false
+}
