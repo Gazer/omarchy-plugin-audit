@@ -111,7 +111,7 @@ program
           findings: analysis.findings,
           fileContents,
         });
-        const raw = await runLlmAnalysis(prompt, { model: opts.llmModel });
+        const raw = await runLlmAnalysis(prompt, { model: opts.llmModel, dir: tmpDir });
         const parsedLlm = parseLlmResponse(raw);
         llmAnalysis = {
           model: opts.llmModel,

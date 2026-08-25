@@ -49,7 +49,9 @@ export function buildLlmPrompt(opts: {
     .join('\n\n');
 
   return `You are a security analyst for Omarchy plugins (QML/Qt/Quickshell). These plugins run inside the user's shell with high privileges (file, network, process).
-IMPORTANT: Do not call any tools or read external files. Use ONLY the file contents provided below. No tool calls needed. Analyze directly and return JSON.
+You are running inside the plugin directory — you may use tools to explore further if needed, but the file contents below are already provided for quick analysis.
+
+
 
 Plugin: ${slug} Commit: ${commit}
 File tree: ${fileTree.map((f) => f.path).join(', ')}
@@ -57,7 +59,7 @@ File tree: ${fileTree.map((f) => f.path).join(', ')}
 Static findings (from regex, may be noisy or lack context):
 ${findingsBlock || '(no findings)'}
 
-Full file contents (truncated to 120 lines per file, provided for you — do not read more):
+Full file contents (truncated to 120 lines per file):
 ${filesBlock}
 
 Task:
@@ -94,12 +96,15 @@ Be precise, reference relatedCode lines if you find usage elsewhere. If you cann
 `;
 }
 
-export async function runLlmAnalysis(prompt: string, opts?: { model?: string; timeoutMs?: number }): Promise<string> {
+export async function runLlmAnalysis(prompt: string, opts?: { model?: string; timeoutMs?: number; dir?: string }): Promise<string> {
   const model = opts?.model || MODEL;
   const timeoutMs = opts?.timeoutMs; // undefined = no timeout, wait as long as needed
+  const dir = opts?.dir;
 
   return new Promise((resolve, reject) => {
-    const args = ['run', '-m', model, '--format', 'json', '--auto', prompt];
+    const args = ['run', '-m', model, '--format', 'json', '--auto'];
+    if (dir) args.push('--dir', dir);
+    args.push(prompt);
     const child = spawn('opencode', args, {
       env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
       stdio: ['ignore', 'pipe', 'pipe'],
