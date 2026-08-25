@@ -62,7 +62,6 @@ try {
                 const ai = r.llmAnalysis;
                 const aiRisk = ai?.overallRisk;
                 const hasAi = !!ai;
-                const mismatch = hasAi && aiRisk !== r.riskLevel;
                 return (
                   <tr class="hover:bg-slate-50">
                     <td class="px-4 py-3 font-mono text-xs font-medium">{r.slug}</td>
@@ -71,10 +70,7 @@ try {
                     <td class="px-4 py-3"><RiskBadge level={r.riskLevel} /></td>
                     <td class="px-4 py-3">
                       {hasAi ? (
-                        <div class="flex items-center gap-1.5">
-                          <RiskBadge level={aiRisk} />
-                          {mismatch && <span class="text-xs text-amber-600" title={`Static was ${r.riskLevel}, AI refined to ${aiRisk}`}>↳ refined</span>}
-                        </div>
+                        <RiskBadge level={aiRisk} />
                       ) : (
                         <span class="text-xs text-slate-400">— <span title="Run with --with-llm to generate">no AI</span></span>
                       )}
