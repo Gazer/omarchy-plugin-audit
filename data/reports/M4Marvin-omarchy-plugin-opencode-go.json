@@ -1,0 +1,267 @@
+{
+  "slug": "M4Marvin-omarchy-plugin-opencode-go",
+  "url": "https://github.com/M4Marvin/omarchy-plugin-opencode-go",
+  "commit": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
+  "commitShort": "3594b52",
+  "commitUrl": "https://github.com/M4Marvin/omarchy-plugin-opencode-go/commit/3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
+  "scannedAt": "2026-08-25T09:54:18.727Z",
+  "fromCommit": null,
+  "fromCommitShort": null,
+  "diff": {
+    "filesChanged": [
+      {
+        "status": "A",
+        "path": "LICENSE"
+      },
+      {
+        "status": "A",
+        "path": "Model.js"
+      },
+      {
+        "status": "A",
+        "path": "Panel.qml"
+      },
+      {
+        "status": "A",
+        "path": "README.md"
+      },
+      {
+        "status": "A",
+        "path": "Service.qml"
+      },
+      {
+        "status": "A",
+        "path": "collector.sh"
+      },
+      {
+        "status": "A",
+        "path": "manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "opencode-go.svg"
+      },
+      {
+        "status": "A",
+        "path": "preview.png"
+      }
+    ],
+    "commits": [
+      {
+        "sha": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
+        "message": "Add preview screenshot",
+        "author": "Marvin V Prakash",
+        "date": "2026-08-14T06:24:18+04:00"
+      },
+      {
+        "sha": "db02dd6be8b741f6f79949c35f012655e3fe4550",
+        "message": "OpenCode Go usage bar widget for Omarchy",
+        "author": "Marvin V Prakash",
+        "date": "2026-08-14T06:12:44+04:00"
+      }
+    ],
+    "stats": {
+      "added": 9,
+      "modified": 0,
+      "deleted": 0
+    }
+  },
+  "fileTree": [
+    {
+      "path": "Model.js",
+      "lines": 155,
+      "size": 4646,
+      "type": "js"
+    },
+    {
+      "path": "Panel.qml",
+      "lines": 396,
+      "size": 12531,
+      "type": "qml"
+    },
+    {
+      "path": "Service.qml",
+      "lines": 66,
+      "size": 2147,
+      "type": "qml"
+    },
+    {
+      "path": "collector.sh",
+      "lines": 33,
+      "size": 1894,
+      "type": "other"
+    },
+    {
+      "path": "manifest.json",
+      "lines": 2,
+      "size": 679,
+      "type": "json"
+    }
+  ],
+  "inventory": {
+    "fileOps": [
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "Panel.qml",
+        "line": 77,
+        "column": 17,
+        "snippet": "source: Qt.resolvedUrl(\"opencode-go.svg\")",
+        "description": "Resolves file URL"
+      },
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "Service.qml",
+        "line": 15,
+        "column": 71,
+        "snippet": "readonly property string collectorScript: decodeURIComponent(String(Qt.resolvedUrl(\"collector.sh\")).replace(/^file:\\/\\//",
+        "description": "Resolves file URL"
+      }
+    ],
+    "networkCalls": [],
+    "processes": [
+      {
+        "severity": "medium",
+        "category": "ipc",
+        "pattern": "ipcTarget",
+        "file": "Panel.qml",
+        "line": 14,
+        "column": 3,
+        "snippet": "ipcTarget: \"local.opencode-go\"",
+        "description": "IPC handler exposure — payload appears validated via conditional check (handler checks state before acting; review logic)"
+      }
+    ],
+    "imports": [
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Panel.qml",
+        "line": 5,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "Panel.qml",
+        "line": 7,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Service.qml",
+        "line": 2,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "ipc",
+      "pattern": "ipcTarget",
+      "file": "Panel.qml",
+      "line": 14,
+      "column": 3,
+      "snippet": "ipcTarget: \"local.opencode-go\"",
+      "description": "IPC handler exposure — payload appears validated via conditional check (handler checks state before acting; review logic)"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "Panel.qml",
+      "line": 77,
+      "column": 17,
+      "snippet": "source: Qt.resolvedUrl(\"opencode-go.svg\")",
+      "description": "Resolves file URL"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "Service.qml",
+      "line": 15,
+      "column": 71,
+      "snippet": "readonly property string collectorScript: decodeURIComponent(String(Qt.resolvedUrl(\"collector.sh\")).replace(/^file:\\/\\//",
+      "description": "Resolves file URL"
+    }
+  ],
+  "obfuscation": [
+    {
+      "type": "binary",
+      "file": "collector.sh",
+      "line": 1,
+      "snippet": "#!/usr/bin/env bash\nset -uo pipefail\nAUTH_JSON=\"${OPENCODE_AUTH_JSON:-$HOME/.local/share/opencode/auth.json}\"\nURL=https:",
+      "severity": "high"
+    },
+    {
+      "type": "minified",
+      "file": "manifest.json",
+      "line": 1,
+      "snippet": "{\"schemaVersion\":1,\"id\":\"local.opencode-go\",\"name\":\"OpenCode Go Usage\",\"version\":\"1.0.0\",\"author\":\"OpenCode community\",\"",
+      "severity": "medium"
+    }
+  ],
+  "score": 13,
+  "riskLevel": "medium",
+  "obfuscationFlag": true,
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T09:54:18.726Z",
+    "overallRisk": "low",
+    "summary": "Plugin is a read-only usage monitor with no arbitrary command execution or unvalidated IPC; only notable privilege is periodic execution of its own bundled collector.sh (fixed args) to query OpenCode API and local SQLite. No malicious patterns found.",
+    "whatItDoes": "Displays OpenCode Go quota (5h rolling, weekly, monthly) as progress bars with percent, dollar limit, reset countdown and behind/ahead pace indicator in the Omarchy bar. Clicking opens a details panel with recent 7-day token history and status. Data is refreshed automatically (default 300s) by running collector.sh which calls the OpenCode Go API and reads local token history from opencode.db.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel as Panel.qml\n    participant Service as Service.qml\n    participant Script as collector.sh\n    participant API as opencode.ai/zen/go/v1/usage\n    participant DB as ~/.local/share/opencode/opencode.db\n    Timer->>Service: triggeredOnStart / every refreshIntervalSec\n    User->>Panel: click / R key / RightClick\n    Panel->>Service: refresh()\n    Service->>Script: Process command [\"bash\", collectorScript]\n    Script->>API: curl Bearer key from auth.json\n    Script->>DB: sqlite3 -readonly query last 7d tokens\n    Script-->>Service: JSON {status, rolling, weekly, monthly, recentDays}\n    Service->>Service: Model.parseCollector() validate label==\"Go\"\n    Service-->>Panel: account / recentDays / lastError / lastUpdated\n    Panel-->>User: render bars, countdown, pace, token chart",
+    "findings": [
+      {
+        "file": "Panel.qml",
+        "line": 14,
+        "pattern": "ipcTarget",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Registers standard Omarchy bar-widget IPC target local.opencode-go with no custom IpcHandler in plugin; base Panel only exposes open/toggle via qs.Commons - no payload parsing or unchecked state mutation found.",
+        "relatedCode": "Panel { moduleName: \"local.opencode-go\" ipcTarget: \"local.opencode-go\" } // No IpcHandler blocks in Panel.qml/Service.qml",
+        "executableContext": "No executable; standard widget registration for bar toggle/refresh, no arguments or external input handling"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 77,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Resolves bundled static asset opencode-go.svg used solely as Image source with MultiEffect colorization; never passed to Process, execDetached, or file write - benign resource resolution (also at line 162).",
+        "relatedCode": "Image { source: Qt.resolvedUrl(\"opencode-go.svg\") } // Panel.qml:77 and 162, Image.source only",
+        "executableContext": "No executable - SVG icon for bar/panel display only; not executed, no arguments, no sanitization needed"
+      },
+      {
+        "file": "Service.qml",
+        "line": 15,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": false,
+        "isMalicious": false,
+        "reasoning": "Resolves bundled collector.sh which IS executed, so severity is low not info; but command is fixed [\"bash\", root.collectorScript] with no user-controlled args and path pinned to plugin dir via Qt.resolvedUrl - no injection surface beyond intended behavior.",
+        "relatedCode": "readonly property string collectorScript: decodeURIComponent(String(Qt.resolvedUrl(\"collector.sh\")).replace(/^file:\\/\\//, \"\")) // Service.qml:15 used at collector.command = [\"bash\", root.collectorScript] // Service.qml:31 with guard if (refreshing || collector.running) return",
+        "executableContext": "collector.sh is bundled bash that curls https://opencode.ai/zen/go/v1/usage with key from $OPENCODE_AUTH_JSON or ~/.local/share/opencode/auth.json and reads ~/.local/share/opencode/opencode.db readonly for 7-day totals; invoked with zero args, no user interpolation, cutoff computed locally"
+      }
+    ]
+  }
+}

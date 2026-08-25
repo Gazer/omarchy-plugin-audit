@@ -1,0 +1,291 @@
+{
+  "slug": "niraletter-vitals",
+  "url": "https://github.com/niraletter/vitals",
+  "commit": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
+  "commitShort": "1dcdbf7",
+  "commitUrl": "https://github.com/niraletter/vitals/commit/1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
+  "scannedAt": "2026-08-25T09:55:14.423Z",
+  "fromCommit": null,
+  "fromCommitShort": null,
+  "diff": {
+    "filesChanged": [
+      {
+        "status": "A",
+        "path": "BarWidget.qml"
+      },
+      {
+        "status": "A",
+        "path": "GpuLogic.js"
+      },
+      {
+        "status": "A",
+        "path": "LICENSE"
+      },
+      {
+        "status": "A",
+        "path": "MetricTiles.qml"
+      },
+      {
+        "status": "A",
+        "path": "Model.js"
+      },
+      {
+        "status": "A",
+        "path": "Panel.qml"
+      },
+      {
+        "status": "A",
+        "path": "ProcessList.qml"
+      },
+      {
+        "status": "A",
+        "path": "ProcessLogic.js"
+      },
+      {
+        "status": "A",
+        "path": "README.md"
+      },
+      {
+        "status": "A",
+        "path": "manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "preview.png"
+      }
+    ],
+    "commits": [
+      {
+        "sha": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
+        "message": "make the text more visible across all themes",
+        "author": "Nirakar Bogati",
+        "date": "2026-08-15T18:35:23+05:45"
+      },
+      {
+        "sha": "03718a1928c1340a0e959d8c843ade4a12481a2a",
+        "message": "Delete image.jpeg",
+        "author": "N1R4",
+        "date": "2026-08-13T02:11:56+05:45"
+      },
+      {
+        "sha": "02002ccd9b1ca067e0d8d7f01691d69762c15e9a",
+        "message": "add image preview",
+        "author": "N1R4",
+        "date": "2026-08-13T02:11:40+05:45"
+      },
+      {
+        "sha": "08f8edaba81738d14a123aacc3f0c905634e8fb8",
+        "message": "Fix formatting in README installation instructions",
+        "author": "N1R4",
+        "date": "2026-08-13T00:55:02+05:45"
+      },
+      {
+        "sha": "6989b5a17ea69307d171a7d0e22423257f607239",
+        "message": "update README",
+        "author": "N1R4",
+        "date": "2026-08-13T00:54:03+05:45"
+      },
+      {
+        "sha": "8e0c73f4db07d263cadea23d07d96672ab5faedb",
+        "message": "update README",
+        "author": "N1R4",
+        "date": "2026-08-13T00:53:10+05:45"
+      },
+      {
+        "sha": "b5c05843ce5df8b5811004837aaf08f0b1110c6f",
+        "message": "Remove Development section from README",
+        "author": "N1R4",
+        "date": "2026-08-13T00:52:08+05:45"
+      },
+      {
+        "sha": "f7e128b0d09d1d203ff29a559e82053c2bdb935a",
+        "message": "Reorganize README: move Installation before Features and clean up",
+        "author": "N1R4",
+        "date": "2026-08-13T00:48:57+05:45"
+      },
+      {
+        "sha": "41ae7bf9e0454afec1cca6ee7b63268731bb5efd",
+        "message": "Update README.md",
+        "author": "N1R4",
+        "date": "2026-08-13T00:47:19+05:45"
+      },
+      {
+        "sha": "b368eab79c855f085f16e1c8d4f50656ae69b8d7",
+        "message": "update README",
+        "author": "N1R4",
+        "date": "2026-08-13T00:46:14+05:45"
+      }
+    ],
+    "stats": {
+      "added": 11,
+      "modified": 0,
+      "deleted": 0
+    }
+  },
+  "fileTree": [
+    {
+      "path": "BarWidget.qml",
+      "lines": 98,
+      "size": 2471,
+      "type": "qml"
+    },
+    {
+      "path": "GpuLogic.js",
+      "lines": 94,
+      "size": 3066,
+      "type": "js"
+    },
+    {
+      "path": "MetricTiles.qml",
+      "lines": 741,
+      "size": 33433,
+      "type": "qml"
+    },
+    {
+      "path": "Model.js",
+      "lines": 33,
+      "size": 852,
+      "type": "js"
+    },
+    {
+      "path": "Panel.qml",
+      "lines": 3061,
+      "size": 111007,
+      "type": "qml"
+    },
+    {
+      "path": "ProcessList.qml",
+      "lines": 488,
+      "size": 18965,
+      "type": "qml"
+    },
+    {
+      "path": "ProcessLogic.js",
+      "lines": 67,
+      "size": 2849,
+      "type": "js"
+    },
+    {
+      "path": "manifest.json",
+      "lines": 20,
+      "size": 481,
+      "type": "json"
+    }
+  ],
+  "inventory": {
+    "fileOps": [
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "BarWidget.qml",
+        "line": 61,
+        "column": 13,
+        "snippet": "source: Qt.resolvedUrl(\"Panel.qml\")",
+        "description": "Resolves file URL"
+      }
+    ],
+    "networkCalls": [],
+    "processes": [],
+    "imports": [
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "BarWidget.qml",
+        "line": 2,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "MetricTiles.qml",
+        "line": 4,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Panel.qml",
+        "line": 4,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "Panel.qml",
+        "line": 6,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "ProcessList.qml",
+        "line": 4,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "ProcessList.qml",
+        "line": 5,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "BarWidget.qml",
+      "line": 61,
+      "column": 13,
+      "snippet": "source: Qt.resolvedUrl(\"Panel.qml\")",
+      "description": "Resolves file URL"
+    }
+  ],
+  "obfuscation": [],
+  "score": 2,
+  "riskLevel": "low",
+  "obfuscationFlag": false,
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T09:55:14.422Z",
+    "overallRisk": "low",
+    "summary": "Single flagged Qt.resolvedUrl is a benign local QML loader with no exec; plugin is a legitimate system monitor that polls hardcoded /proc/sys tools and only runs privileged actions (kill, pkexec) after explicit user confirmation and strict validation (PID>1, currentUser-scoped fdinfo).",
+    "whatItDoes": "Vitals adds a bar widget showing one pinned metric (CPU, memory, network, disk, GPU or storage) and a dashboard popup with six live tiles, sparkline graphs and expandable details. When open it polls /proc, sensors, lspci and nvidia-smi/intel_gpu_top to populate per-core CPU, memory pressure, network/disk rates, GPU VRAM/temperature and a searchable, sortable process list with terminate/force-kill.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant BarWidget\n    participant Panel\n    participant Sys as System Tools\n    User->>BarWidget: Click / middle-click widget\n    BarWidget->>Panel: Loader source Qt.resolvedUrl(\"Panel.qml\")\n    Panel->>Sys: Poll cat /proc/stat, /proc/meminfo, /proc/net/dev, df, sensors -j, lspci, nvidia-smi\n    Sys-->>Panel: stdout parsed -> cpu/memory/network/disk/gpu/mounts state\n    Panel-->>User: Render tiles, graphs, tooltip and process list\n    User->>Panel: Expand tile / filter/search / select PID -> Terminate/Force kill\n    Panel->>Panel: ConfirmDialog check pid>1\n    Panel->>Sys: kill -TERM/-KILL <pid> or pkexec setcap/pacman for intel_gpu_top\n    Sys-->>Panel: exitCode -> actionMessage + refreshFull()",
+    "findings": [
+      {
+        "file": "BarWidget.qml",
+        "line": 61,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Qt.resolvedUrl('Panel.qml') is a static local QML import used as Loader.source for UI composition; no user input, no filesystem traversal, and never passed to Process.command or shell execution.",
+        "relatedCode": "Loader { source: Qt.resolvedUrl(\"Panel.qml\") } at BarWidget.qml:61 -> onLoaded injectPanel(); used only as QML component source, not as executable",
+        "executableContext": "None - resolves sibling UI file Panel.qml inside plugin bundle, not an executable. No args, no execDetached, no Process invocation."
+      }
+    ]
+  }
+}

@@ -4,152 +4,14 @@
   "commit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "commitShort": "6d9184a",
   "commitUrl": "https://github.com/gastonmira/omarchy-mx-master/commit/6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-  "scannedAt": "2026-08-25T08:30:03.593Z",
-  "fromCommit": null,
-  "fromCommitShort": null,
+  "scannedAt": "2026-08-25T09:42:49.184Z",
+  "fromCommit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
+  "fromCommitShort": "6d9184a",
   "diff": {
-    "filesChanged": [
-      {
-        "status": "A",
-        "path": ".github/workflows/tests.yml"
-      },
-      {
-        "status": "A",
-        "path": ".gitignore"
-      },
-      {
-        "status": "A",
-        "path": "LICENSE"
-      },
-      {
-        "status": "A",
-        "path": "Model.js"
-      },
-      {
-        "status": "A",
-        "path": "Panel.qml"
-      },
-      {
-        "status": "A",
-        "path": "README.md"
-      },
-      {
-        "status": "A",
-        "path": "actions.json"
-      },
-      {
-        "status": "A",
-        "path": "manifest.json"
-      },
-      {
-        "status": "A",
-        "path": "mx-buttons"
-      },
-      {
-        "status": "A",
-        "path": "mx-ctl"
-      },
-      {
-        "status": "A",
-        "path": "preview.png"
-      },
-      {
-        "status": "A",
-        "path": "tests/model.test.mjs"
-      },
-      {
-        "status": "A",
-        "path": "tests/run"
-      },
-      {
-        "status": "A",
-        "path": "tests/support.py"
-      },
-      {
-        "status": "A",
-        "path": "tests/test_apply.py"
-      },
-      {
-        "status": "A",
-        "path": "tests/test_config.py"
-      },
-      {
-        "status": "A",
-        "path": "tests/test_mx_ctl.py"
-      },
-      {
-        "status": "A",
-        "path": "tests/test_rules.py"
-      },
-      {
-        "status": "A",
-        "path": "tests/test_shape.py"
-      }
-    ],
-    "commits": [
-      {
-        "sha": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-        "message": "Release 1.0.1",
-        "author": "Gaston Mira",
-        "date": "2026-08-23T11:49:54-03:00"
-      },
-      {
-        "sha": "655a2ff0f6bb7e99bd26e70ec16e07f612e3f45a",
-        "message": "Add the suite that holds the review's invariants",
-        "author": "Gaston Mira",
-        "date": "2026-08-23T11:45:51-03:00"
-      },
-      {
-        "sha": "66b1e47b864cbaf60296c6fc9015714db070b8eb",
-        "message": "Close three gaps the new tests found",
-        "author": "Gaston Mira",
-        "date": "2026-08-23T11:45:51-03:00"
-      },
-      {
-        "sha": "6e220d5662456468f25b176f6f655a890f2c3142",
-        "message": "Bound the rules.yaml read itself, not the size it reported",
-        "author": "Gaston Mira",
-        "date": "2026-08-23T11:26:12-03:00"
-      },
-      {
-        "sha": "61e4be9c04096f7eb6825883d8d6a2848361d946",
-        "message": "Close the interval between validating rules.yaml and reading it",
-        "author": "Gaston Mira",
-        "date": "2026-08-22T19:23:50-03:00"
-      },
-      {
-        "sha": "d89883c9ebc0a4902de3c97b06381e8321066cff",
-        "message": "Reject an oversized rules.yaml before stopping the daemon",
-        "author": "Gaston Mira",
-        "date": "2026-08-22T18:45:28-03:00"
-      },
-      {
-        "sha": "70e030f6331e35f77c1a9d9a4fb782c1db1bbc87",
-        "message": "Refuse an oversized rules.yaml instead of truncating it",
-        "author": "Gaston Mira",
-        "date": "2026-08-22T18:38:39-03:00"
-      },
-      {
-        "sha": "5d265411a6c337a0f3f621abc7c05800f0354f4f",
-        "message": "Address marketplace security review",
-        "author": "Gaston Mira",
-        "date": "2026-08-22T17:15:44-03:00"
-      },
-      {
-        "sha": "84dd4cc8ba9bc3309f4829c22f3c1335f3ed2eeb",
-        "message": "Name the plugin \"MX Master Panel\"",
-        "author": "Gaston Mira",
-        "date": "2026-08-22T16:58:33-03:00"
-      },
-      {
-        "sha": "90891881ea474bfeb6b19a0275bf02396ce9ebcb",
-        "message": "Do not report Disconnected before the first read lands",
-        "author": "Gaston Mira",
-        "date": "2026-08-22T16:56:37-03:00"
-      }
-    ],
+    "filesChanged": [],
+    "commits": [],
     "stats": {
-      "added": 19,
+      "added": 0,
       "modified": 0,
       "deleted": 0
     }
@@ -254,5 +116,39 @@
   "obfuscation": [],
   "score": 4,
   "riskLevel": "low",
-  "obfuscationFlag": false
+  "obfuscationFlag": false,
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T09:42:49.184Z",
+    "overallRisk": "low",
+    "summary": "Plugin is a legitimate system widget with careful input caps, output truncation, and shell escaping; IPC exposure is inert and bundled executables are invoked via positional parameters with no unsanitized injection path. Main privilege is intended: writing mouse settings and Solaar rules and restarting Solaar.",
+    "whatItDoes": "Shows battery, connection state and live settings for a Logitech MX Master 3S in the Omarchy bar and lets the user adjust DPI, scroll-wheel modes and SmartShift threshold. It also remaps the divertable mouse buttons to presets or custom shell commands that run via Solaar rules, writing changes to the mouse's onboard memory so they persist across reboots and hosts.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel\n    participant Ctl as mx-ctl\n    participant Btn as mx-buttons\n    participant Solaar\n    participant Mouse\n    User->>Panel: open panel / move slider / pick button action\n    Panel->>Ctl: Process bash -c MX_DEVICE=\"$1\" \"$0\" status/set (ctl, deviceName)\n    Ctl->>Solaar: solaar config/show \"$DEVICE\" (timeout 15s, head -c 64k)\n    Solaar->>Mouse: HID++ over Bluetooth/hidraw\n    Mouse-->>Solaar: settings / Battery\n    Solaar-->>Ctl: key=value lines\n    Ctl-->>Panel: stdout -> Model.parseStatus/capInput\n    Panel->>Btn: get / set button (mx-buttons get/set)\n    Btn->>Solaar: solaar config divert-keys / reprogrammable-keys\n    Btn->>Solaar: write ~/.config/solaar/rules.yaml (yaml_str escaped) + SIGTERM/restart",
+    "findings": [
+      {
+        "file": "Panel.qml",
+        "line": 16,
+        "pattern": "ipcTarget",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Sets ipcTarget but defines no IpcHandler/onMessage; no custom payload handler exists to validate or exploit, only base Panel lifecycle is exposed.",
+        "relatedCode": "Panel { moduleName: \"mxmaster.panel\" ipcTarget: \"mxmaster.panel\" } - no IpcHandler found in file",
+        "executableContext": ""
+      },
+      {
+        "file": "Panel.qml",
+        "line": 29,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Qt.resolvedUrl(\"mx-ctl\") (and \"mx-buttons\" at line 88) locates bundled helpers, not arbitrary files; both are later executed via Process bash -c with positional params ($0=ctl, $1=deviceName) and quoted MX_DEVICE=\"$1\", preventing injection.",
+        "relatedCode": "readonly property string ctl: String(Qt.resolvedUrl(\"mx-ctl\")).replace(\"file://\", \"\") -> statusProc.command = [\"bash\",\"-c\",\"MX_DEVICE=\\\"$1\\\" \\\"$0\\\" status --battery\", root.ctl, root.deviceName] (102-104) ; writeProc.command similarly (144)",
+        "executableContext": "mx-ctl wraps `solaar config/show` for Logitech MX Master 3S (status/battery/set, writes to mouse onboard memory); mx-buttons wraps `solaar config divert-keys/reprogrammable-keys` and regenerates ~/.config/solaar/rules.yaml with Execute: [bash,-c,command] ; args sanitized via bash positional parameters, quoted assignments, timeout/head -c caps, and yaml_str escaping; custom command via panel TextField is capped to 2048 chars and intentional user-controlled Execute."
+      }
+    ]
+  }
 }

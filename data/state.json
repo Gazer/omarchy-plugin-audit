@@ -2,15 +2,29 @@
   "jankeesvw-omarchy-downloads": {
     "url": "https://github.com/jankeesvw/omarchy-downloads",
     "lastScanned": "3a4831032fccc24173533f7adeda4bffb5dcb664",
-    "lastScannedAt": "2026-08-25T08:23:44.165Z",
+    "lastScannedAt": "2026-08-25T09:43:25.401Z",
     "lastRisk": "medium",
     "lastScore": 8
   },
   "gastonmira-omarchy-mx-master": {
     "url": "https://github.com/gastonmira/omarchy-mx-master",
     "lastScanned": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-    "lastScannedAt": "2026-08-25T08:30:03.593Z",
+    "lastScannedAt": "2026-08-25T09:42:49.184Z",
     "lastRisk": "low",
     "lastScore": 4
+  },
+  "M4Marvin-omarchy-plugin-opencode-go": {
+    "url": "https://github.com/M4Marvin/omarchy-plugin-opencode-go",
+    "lastScanned": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
+    "lastScannedAt": "2026-08-25T09:54:18.727Z",
+    "lastRisk": "medium",
+    "lastScore": 13
+  },
+  "niraletter-vitals": {
+    "url": "https://github.com/niraletter/vitals",
+    "lastScanned": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
+    "lastScannedAt": "2026-08-25T09:55:14.423Z",
+    "lastRisk": "low",
+    "lastScore": 2
   }
 }

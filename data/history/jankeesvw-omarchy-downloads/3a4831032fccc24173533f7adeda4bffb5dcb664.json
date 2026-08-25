@@ -4,80 +4,14 @@
   "commit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "commitShort": "3a48310",
   "commitUrl": "https://github.com/jankeesvw/omarchy-downloads/commit/3a4831032fccc24173533f7adeda4bffb5dcb664",
-  "scannedAt": "2026-08-25T08:23:44.165Z",
-  "fromCommit": null,
-  "fromCommitShort": null,
+  "scannedAt": "2026-08-25T09:43:25.401Z",
+  "fromCommit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
+  "fromCommitShort": "3a48310",
   "diff": {
-    "filesChanged": [
-      {
-        "status": "A",
-        "path": "DownloadRow.qml"
-      },
-      {
-        "status": "A",
-        "path": "DownloadsStore.qml"
-      },
-      {
-        "status": "A",
-        "path": "LICENSE"
-      },
-      {
-        "status": "A",
-        "path": "Panel.qml"
-      },
-      {
-        "status": "A",
-        "path": "README.md"
-      },
-      {
-        "status": "A",
-        "path": "manifest.json"
-      },
-      {
-        "status": "A",
-        "path": "preview.png"
-      },
-      {
-        "status": "A",
-        "path": "qmldir"
-      },
-      {
-        "status": "A",
-        "path": "screenshots/light.png"
-      },
-      {
-        "status": "A",
-        "path": "screenshots/panel.png"
-      }
-    ],
-    "commits": [
-      {
-        "sha": "3a4831032fccc24173533f7adeda4bffb5dcb664",
-        "message": "Bound the folder read, and stop paying for a folder that keeps moving",
-        "author": "Jankees van Woezik",
-        "date": "2026-08-25T06:46:28+02:00"
-      },
-      {
-        "sha": "86274bf4e19b24937a3a9e9cb63a097ad3b7124f",
-        "message": "Add root preview.png for the marketplace listing card",
-        "author": "Jankees van Woezik",
-        "date": "2026-08-24T12:22:24+02:00"
-      },
-      {
-        "sha": "3a0607cf702f5ffd6735cc13ee22bb2238533f28",
-        "message": "Carry the drag from the row itself, and note the empty-workspace trap",
-        "author": "Jankees van Woezik",
-        "date": "2026-08-24T12:01:28+02:00"
-      },
-      {
-        "sha": "92f4a320a6fa8642930020181f74acfe030a2fd0",
-        "message": "Downloads widget: recent downloads in the bar, draggable from a window",
-        "author": "Jankees van Woezik",
-        "date": "2026-08-24T11:38:12+02:00"
-      }
-    ],
+    "filesChanged": [],
+    "commits": [],
     "stats": {
-      "added": 10,
+      "added": 0,
       "modified": 0,
       "deleted": 0
     }
@@ -262,5 +196,63 @@
   "obfuscation": [],
   "score": 8,
   "riskLevel": "medium",
-  "obfuscationFlag": false
+  "obfuscationFlag": false,
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T09:43:25.400Z",
+    "overallRisk": "safe",
+    "summary": "Plugin is a well-hardened downloads viewer: all Text is PlainText, directory access is read-only and bounded with DoS mitigation, exec uses Quickshell.execDetached array form with absolute-path checks and no shell, and IPC only toggles visibility.",
+    "whatItDoes": "Shows recent downloads in the bar with a badge for files arriving within freshMinutes and a floating window listing the newest files. Users can filter fresh/all, see age/size/icon, drag rows via Wayland wl_data_device (text/uri-list) into other apps, double-click to open a file or right-click to open the folder via xdg-open.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel\n    participant Store as DownloadsStore\n    participant Model as FolderListModel\n    participant FS as Downloads Folder\n    User->>Panel: applySettings() folder via Util.fileUrl()\n    Panel->>Store: configure(freshMinutes, folderUrl)\n    Store->>Model: set scanFolder = folderUrl\n    Model->>FS: read directory (Time sort, newest first)\n    FS-->>Model: fileName/fileUrl/filePath/fileSize/fileModified\n    Model-->>Store: onCount/onStatus Ready -> scheduleTick() -> rebuild() (maxScan 2000, maxRows 200)\n    Store-->>Panel: freshCount -> badge, files -> FloatingWindow ListView\n    User->>Store: drag row (Drag.Automatic text/uri-list) / double-click\n    Store->>FS: Quickshell.execDetached([\"xdg-open\", target]) if target starts with \"/\"",
+    "findings": [
+      {
+        "file": "DownloadsStore.qml",
+        "line": 34,
+        "pattern": "StandardPaths",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Default download folder via StandardPaths.writableLocation(DownloadLocation); read-only URL property, user-overridable via Panel settings, never executed or passed to shell.",
+        "relatedCode": "property url folderUrl: StandardPaths.writableLocation(StandardPaths.DownloadLocation) -> folderPath/folderUrl used as FolderListModel folder and xdg-open target",
+        "executableContext": "No executable; only defines default file:// URL for FolderListModel source"
+      },
+      {
+        "file": "DownloadsStore.qml",
+        "line": 224,
+        "pattern": "FolderListModel",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Read-only directory listing of the downloads folder; bounded by maxScan=2000/maxRows=200, polling fallback over maxScan mitigates UI thread DoS, no shell or exec on filenames, all display is PlainText.",
+        "relatedCode": "FolderListModel { folder: root.scanFolder showDirs:false sortField: Time } tick() checks status===Ready before rebuild()",
+        "executableContext": "No executable; data flows only to UI model (fileName/url/path/size/modified) and drag mimeData"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 29,
+        "pattern": "ipcTarget",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "IPC target jankeesvw.downloads exposes only base Panel open/close (shell summon) with guarded mirroring via onOpenedChanged/onOpenChanged; no custom command handler or payload parsing.",
+        "relatedCode": "ipcTarget: \"jankeesvw.downloads\" | onOpenedChanged: if(DownloadsStore.open!==root.opened) | Connections onOpenChanged: root.open()/close()",
+        "executableContext": "No executable or argument handling via IPC; only toggles DownloadsStore.open boolean"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 69,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Converts user-controlled shell.json folder string to file:// URL for DownloadsStore.folderUrl; not shell-interpolated, later consumed only as FolderListModel folder and via Quickshell.execDetached array form with leading-slash check.",
+        "relatedCode": "Util.fileUrl(folder) -> DownloadsStore.configure()-> root.folderUrl -> FolderListModel folder / Quickshell.execDetached([\"xdg-open\", target]) if target.charAt(0)===\"/\" at DownloadsStore.qml:258 and DownloadRow.qml:166",
+        "executableContext": "xdg-open via Quickshell.execDetached([\"xdg-open\", absolutePath]) - opens folder (DownloadsStore.openFolder) or file (DownloadRow onDoubleClicked); array exec prevents shell injection, slash guard prevents option injection (-foo), user-initiated only"
+      }
+    ]
+  }
 }
