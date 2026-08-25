@@ -4,13 +4,29 @@ import os from 'node:os';
 import path from 'node:path';
 
 export async function getRemoteHead(url: string): Promise<string> {
-  const git = simpleGit();
-  const out = await git.listRemote([url, 'HEAD']);
-  const sha = out.split(/\s+/)[0]?.trim();
-  if (!sha || !/^[0-9a-f]{40}$/.test(sha)) {
-    throw new Error(`Failed to reach ${url} — check URL or network access`);
+  // Disable interactive credential prompt — fail fast with clear error
+  const prev = process.env.GIT_TERMINAL_PROMPT;
+  process.env.GIT_TERMINAL_PROMPT = '0';
+  try {
+    const git = simpleGit();
+    const out = await git.listRemote([url, 'HEAD']);
+    const sha = out.split(/\s+/)[0]?.trim();
+    if (!sha || !/^[0-9a-f]{40}$/.test(sha)) {
+      throw new Error(`Failed to reach ${url} — check URL or network access. Repository may not exist, is private, or URL has a typo.`);
+    }
+    return sha;
+  } catch (e: any) {
+    const msg = e?.message || String(e);
+    if (/could not read Username|terminal prompts disabled|Authentication failed|403|404|not found/i.test(msg)) {
+      throw new Error(
+        `Failed to reach ${url} — repository not found or access denied. Check URL for typos (e.g., 'omarchy-downloads' vs 'omarchy-download'), ensure it is public, or set GH_TOKEN for private repos.`
+      );
+    }
+    throw new Error(`Failed to reach ${url} — check URL or network access. ${msg}`);
+  } finally {
+    if (prev === undefined) delete process.env.GIT_TERMINAL_PROMPT;
+    else process.env.GIT_TERMINAL_PROMPT = prev;
   }
-  return sha;
 }
 
 export async function cloneAndDiff(
@@ -24,8 +40,19 @@ export async function cloneAndDiff(
   commits: { sha: string; message: string; author: string; date: string }[];
 }> {
   const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), `omarchy-audit-${slug}-`));
+  const prev2 = process.env.GIT_TERMINAL_PROMPT;
+  process.env.GIT_TERMINAL_PROMPT = '0';
   const git = simpleGit();
-  await git.clone(url, tmpDir, ['--depth', '50', '--single-branch']);
+  try {
+    await git.clone(url, tmpDir, ['--depth', '50', '--single-branch']);
+  } catch (e: any) {
+    throw new Error(
+      `Failed to clone ${url} — repository not found or access denied. Check URL for typos, ensure it is public, or set GH_TOKEN for private repos.`
+    );
+  } finally {
+    if (prev2 === undefined) delete process.env.GIT_TERMINAL_PROMPT;
+    else process.env.GIT_TERMINAL_PROMPT = prev2;
+  }
   const g = simpleGit(tmpDir);
   const head = (await g.revparse(['HEAD'])).trim();
 
