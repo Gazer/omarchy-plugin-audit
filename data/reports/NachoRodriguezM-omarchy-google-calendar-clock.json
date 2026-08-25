@@ -5,7 +5,7 @@
   "commit": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
   "commitShort": "14cf448",
   "commitUrl": "https://github.com/NachoRodriguezM/omarchy-google-calendar-clock/commit/14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
-  "scannedAt": "2026-08-25T10:38:50.805Z",
+  "scannedAt": "2026-08-25T11:15:32.917Z",
   "fromCommit": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
   "fromCommitShort": "14cf448",
   "installCommand": "omarchy plugin add https://github.com/NachoRodriguezM/omarchy-google-calendar-clock.git --enable",
@@ -213,5 +213,74 @@
   "score": 19,
   "riskLevel": "high",
   "obfuscationFlag": false,
-  "llmAnalysis": null
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T11:15:32.917Z",
+    "overallRisk": "low",
+    "summary": "Plugin is a local-first clock/calendar with confined IPC and helper-script execution; static flags are largely benign. Resolved URLs point to bundled Panel.qml and fixed allow-list scripts, IPC exposes only no-arg UI verbs, and openUrlExternally is user-click-gated to https meeting links.",
+    "whatItDoes": "Plugin replaces the bar clock with a configurable date/time label and calendar popup. The popup shows a 6-week month grid with ISO weeks, year/life progress bars, and a per-day agenda synced via local Caldir ICS cache with optional Google pull/push via OAuth (direct or hosted). Users can create/edit recurring local events, get 5-min reminders, and JOIN meeting links directly.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant BarWidget\n    participant Panel\n    participant Helper as scripts/calendar-*\n    participant Caldir as Caldir/ICS cache\n    participant Google\n    participant Browser\n    User->>BarWidget: click clock\n    BarWidget->>Panel: Loader source Qt.resolvedUrl(\"Panel.qml\") / toggle()\n    Panel->>Helper: helperPath(\"calendar-cache-read\") via Process.command\n    Helper->>Caldir: read local ICS/JSON\n    Caldir-->>Panel: parseBridgeOutput() events/range\n    Panel-->>User: render month grid + agenda\n    User->>Panel: create/edit event + push\n    Panel->>Helper: calendar-create / calendar-mutate / calendar-push\n    Helper->>Google: authenticated sync (OAuth)\n    User->>Panel: click JOIN\n    Panel->>Browser: Qt.openUrlExternally(meetingLinks[0])",
+    "findings": [
+      {
+        "file": "BarWidget.qml",
+        "line": 121,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Static local QML import via Loader source: Qt.resolvedUrl(\"Panel.qml\") loads bundled panel UI, never used as Process command or external path; no user input.",
+        "relatedCode": "Loader { source: Qt.resolvedUrl(\"Panel.qml\") } BarWidget.qml:121",
+        "executableContext": "Not an executable — internal QML component load only, no Process execution."
+      },
+      {
+        "file": "BarWidget.qml",
+        "line": 129,
+        "pattern": "ipcTarget",
+        "originalSeverity": "high",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "IpcHandler target \"omarchy-google-calendar-clock\" exposes 10 fixed-arity no-arg verbs (open/close/toggle/cycleFormat/refreshCalendar/calendarStatus); no payload parsing or validation needed, cannot inject args or execute arbitrary commands. Worst is local unprivileged UI spam.",
+        "relatedCode": "IpcHandler { target: \"omarchy-google-calendar-clock\"; function refresh():void; function cycleFormat():void; function calendarStatus():string { return panelLoader.item.calendarStatus() } } BarWidget.qml:129-145",
+        "executableContext": "Indirect: refreshCalendar() triggers calendar-cache-read via helperPath, but path is hardcoded allow-list, not IPC-controllable."
+      },
+      {
+        "file": "Panel.qml",
+        "line": 23,
+        "pattern": "ipcTarget",
+        "originalSeverity": "high",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Panel declares ipcTarget with manageIpc:false — actual handler lives in BarWidget.qml:129; same low-risk no-arg verbs, no deserialization of external payload, intentionally disabled on panel side.",
+        "relatedCode": "Panel { ipcTarget: \"omarchy-google-calendar-clock\" manageIpc: false } Panel.qml:22-24; BarWidget handles IPC",
+        "executableContext": "No direct executable; duplicate declaration of same IPC target."
+      },
+      {
+        "file": "Panel.qml",
+        "line": 203,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "helperPath() does Qt.resolvedUrl(\"scripts/\"+name) but all callers pass hardcoded literals (calendar-cache-read, calendar-pull/push, calendar-create/mutate, etc.); name never from settings/IPC/event data, so no traversal/injection despite being used as Process.command[0].",
+        "relatedCode": "function helperPath(name){ var url=String(Qt.resolvedUrl(\"scripts/\"+name)) } -> used as calendarProcess.command=[root.helperPath(\"calendar-cache-read\")] Panel.qml:394; 10+ similar Process commands at 226,255,394,499,515,537,781,803,827,876,894",
+        "executableContext": "Resolves bundled Caldir wrapper scripts (calendar-* , setup/uninstall) that sync local ICS with Google. Args are sanitized: dates via Model.keyForDate, time HH:MM regex, repeat count 2-999, Util.shellQuote for terminal flows; scripts run as user with fixed argv array, not shell."
+      },
+      {
+        "file": "Panel.qml",
+        "line": 2540,
+        "pattern": "Qt.openUrlExternally",
+        "originalSeverity": "high",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "User-gated JOIN button calls Qt.openUrlExternally(agendaEvent.meetingLinks[0]) only on explicit click; meetingLinks are https?:// URLs extracted via CalendarModel.eventMeetingLinks from conference_url/location/description, priorizing meet.google.com/zoom.us etc; no auto-open and not IPC-triggerable.",
+        "relatedCode": "Button { visible: meetingLinks.length>0; onClicked: { Qt.openUrlExternally(agendaEvent.meetingLinks[0]); root.close() } } Panel.qml:2538-2542; URL_PATTERN=/https?:\\/\\/[^\\s<>\"']+/g CalendarModel.js:68",
+        "executableContext": "Opens https URL in system browser via Qt handler; regex blocks file://, javascript: schemes; phishing risk is social-engineering via calendar invite, not RCE."
+      }
+    ]
+  }
 }

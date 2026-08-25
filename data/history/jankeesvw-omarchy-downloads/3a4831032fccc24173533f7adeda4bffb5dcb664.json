@@ -5,7 +5,7 @@
   "commit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "commitShort": "3a48310",
   "commitUrl": "https://github.com/jankeesvw/omarchy-downloads/commit/3a4831032fccc24173533f7adeda4bffb5dcb664",
-  "scannedAt": "2026-08-25T10:38:41.868Z",
+  "scannedAt": "2026-08-25T11:12:48.624Z",
   "fromCommit": "3a4831032fccc24173533f7adeda4bffb5dcb664",
   "fromCommitShort": "3a48310",
   "installCommand": "omarchy plugin add https://github.com/jankeesvw/omarchy-downloads.git --enable",
@@ -200,5 +200,62 @@
   "score": 8,
   "riskLevel": "medium",
   "obfuscationFlag": false,
-  "llmAnalysis": null
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T11:12:48.623Z",
+    "overallRisk": "safe",
+    "summary": "Well-hardened downloads viewer with no shell execution, no network, and explicit hardening (PlainText, array-form execDetached, absolute-path guards, bounded FolderListModel). All flagged patterns are expected read-only folder enumeration and standard Quickshell IPC. No malicious or privilege-escalation behavior detected.",
+    "whatItDoes": "Adds a download icon to the Omarchy bar with a badge counting files added in the last N minutes. Clicking opens a floating window listing recent downloads (fresh/all filter, age and size) where rows can be dragged via Wayland wl_data_device into browsers/chat apps or double-clicked to open, and right-clicking the bar icon opens the download folder.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel as Panel.qml\n    participant Store as DownloadsStore.qml\n    participant FLM as FolderListModel\n    participant Window as FloatingWindow/ListView\n    participant OS as OS (xdg-open / Wayland DnD)\n    User->>Panel: shell.json settings (folder, freshMinutes)\n    Panel->>Store: applySettings() -> configure() via Util.fileUrl(folder)\n    Store->>FLM: scanFolder = folderUrl (StandardPaths.DownloadLocation default)\n    FLM-->>Store: folderModel.count / get(i, fileName/fileUrl/fileModified)\n    Store->>Store: tick()/rebuild() filter isPartial, cap maxScan 2000 / maxRows 200, compute freshCount\n    Store-->>Panel: freshCount -> badge\n    Store-->>Window: files, displayPath, fresh state\n    User->>Panel: click bar button / IPC summon (jankeesvw.downloads)\n    Panel->>Store: toggle()/show() <-> open sync (guarded)\n    Store-->>Window: visible = open\n    User->>Window: drag row (DownloadRow.qml Drag.Automatic text/uri-list)\n    Window->>OS: Wayland start_drag\n    User->>Window: double-click row / right-click bar\n    Window->>OS: Quickshell.execDetached([\"xdg-open\", target]) if target[0]==\"/\"",
+    "findings": [
+      {
+        "file": "DownloadsStore.qml",
+        "line": 34,
+        "pattern": "StandardPaths",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Default writableLocation(DownloadLocation) with override via configure(folder); read-only enumeration for user-visible list, bounded by maxScan/maxRows, no write or exec. Expected for a downloads viewer.",
+        "relatedCode": "property url folderUrl: StandardPaths.writableLocation(StandardPaths.DownloadLocation) -> readonly property string folderPath -> FolderListModel { folder: root.scanFolder }",
+        "executableContext": "Not an executable - resolves default download directory; later consumed only as FolderListModel folder and displayPath/xdg-open target"
+      },
+      {
+        "file": "DownloadsStore.qml",
+        "line": 224,
+        "pattern": "FolderListModel",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Read-only directory listing via Qt.labs.folderlistmodel, showDirs false, Time-sorted newest-first, capped to 2000 entries scanned and 200 rows shown, coalesced tick and polling fallback to avoid UI-thread DoS. No shell or exec.",
+        "relatedCode": "FolderListModel { folder: root.scanFolder; showDirs: false; sortField: Time } + rebuild() { folderModel.get(i,\"fileName\"/\"fileUrl\"/\"fileModified\") } + if (String(root.scanFolder)===\"\" || folderModel.status !== Ready) return",
+        "executableContext": "Not an executable - pure file metadata enumeration; URLs percent-encoded from model and used only for display and drag mimeData"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 29,
+        "pattern": "ipcTarget",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Standard Quickshell Panel ipcTarget \"jankeesvw.downloads\" for summon/open/close; no custom IpcHandler parsing payloads. State sync is guarded both ways (onOpenedChanged if DownloadsStore.open !== root.opened and Connections onOpenChanged) preventing bounce/amplification.",
+        "relatedCode": "ipcTarget: \"jankeesvw.downloads\" + onOpenedChanged: if (DownloadsStore.open !== root.opened) DownloadsStore.open = root.opened + Connections { onOpenChanged() { if (DownloadsStore.open && !root.opened) root.open() else if (...) root.close() } }",
+        "executableContext": "No executable invoked via IPC; exposes only window visibility toggle, not command execution"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 69,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Converts bar setting `folder` string to file:// URL for DownloadsStore.folderUrl; setting comes from shell.json, not IPC. Later use is FolderListModel watch or array-form xdg-open with leading-slash guard, no shell quoting needed.",
+        "relatedCode": "Panel.qml:69 folder !== \"\" ? Util.fileUrl(folder) : undefined -> DownloadsStore.configure() -> root.folderUrl / scanFolder + DownloadsStore.qml:257 if (target.charAt(0)===\"/\") Quickshell.execDetached([\"xdg-open\", target])",
+        "executableContext": "xdg-open opens folder/file with system default handler (not arbitrary binary). Args sanitized: array-form execDetached (no bash -lc) and absolute-path check (charAt(0)===\"/\"), blocks option injection like \"-foo\"; DownloadRow double-click uses same guard"
+      }
+    ]
+  }
 }

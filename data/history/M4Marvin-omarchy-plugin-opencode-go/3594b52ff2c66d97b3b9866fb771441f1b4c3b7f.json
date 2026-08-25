@@ -5,7 +5,7 @@
   "commit": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
   "commitShort": "3594b52",
   "commitUrl": "https://github.com/M4Marvin/omarchy-plugin-opencode-go/commit/3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
-  "scannedAt": "2026-08-25T10:38:46.139Z",
+  "scannedAt": "2026-08-25T11:14:13.691Z",
   "fromCommit": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
   "fromCommitShort": "3594b52",
   "installCommand": "omarchy plugin add https://github.com/M4Marvin/omarchy-plugin-opencode-go.git --enable",
@@ -171,5 +171,50 @@
   "score": 13,
   "riskLevel": "medium",
   "obfuscationFlag": true,
-  "llmAnalysis": null
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T11:14:13.690Z",
+    "overallRisk": "low",
+    "summary": "Plugin is a read-only usage dashboard with no IPC command parser, no dynamic code execution, and fixed bundled assets. The only executable is the bundled collector.sh run as [\"bash\", script] with no arguments; risk is limited to expected read of local auth.json/DB and HTTPS fetch to opencode.ai.",
+    "whatItDoes": "Adds a bar widget that shows OpenCode Go quota as a percentage and highlights when usage is behind pace. Clicking expands a panel with 5h/weekly/monthly limit bars, reset countdowns, and a 7-day token history chart fetched via a background collector.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel as Panel.qml\n    participant Service as Service.qml\n    participant Collector as collector.sh\n    participant API as opencode.ai\n    participant DB as opencode.db\n    User->>Panel: click/right-click or timer\n    Panel->>Service: refresh()\n    Service->>Collector: Process command [\"bash\", collectorScript]\n    Collector->>DB: sqlite3 -readonly query recent tokens\n    Collector->>API: curl Bearer $key https://opencode.ai/zen/go/v1/usage\n    Collector-->>Service: JSON {status, rolling/weekly/monthly, recentDays}\n    Service->>Service: Model.parseCollector() validate\n    Service-->>Panel: update account/recentDays display",
+    "findings": [
+      {
+        "file": "Panel.qml",
+        "line": 14,
+        "pattern": "ipcTarget",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Standard Omarchy Panel registration; no custom IPC handler or payload parsing in this plugin - only base Panel methods (toggle/open/close) are exposed, so no command-injection surface.",
+        "relatedCode": "Panel { moduleName: \"local.opencode-go\" ipcTarget: \"local.opencode-go\" } // no onIpcMessage/handler defined",
+        "executableContext": "No executable - declarative IPC target identifier only"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 77,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Static bundled asset Qt.resolvedUrl(\"opencode-go.svg\") used only as Image source with MultiEffect colorization; literal string, never concatenated or executed.",
+        "relatedCode": "Image { source: Qt.resolvedUrl(\"opencode-go.svg\") } at Panel.qml:77 and Panel.qml:162",
+        "executableContext": "No executable - SVG image asset rendered in UI, not run as process"
+      },
+      {
+        "file": "Service.qml",
+        "line": 15,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Resolves bundled collector.sh to an absolute path then executed as fixed command [\"bash\", root.collectorScript] at Service.qml:31. Path is a literal inside plugin bundle, no user input, no args to inject; execution is intentional and bounded.",
+        "relatedCode": "readonly property string collectorScript: decodeURIComponent(String(Qt.resolvedUrl(\"collector.sh\")).replace(/^file:\\/\\//,\"\")) -> collector.command = [\"bash\", root.collectorScript]",
+        "executableContext": "collector.sh is the plugin's bundled collector: reads $HOME/.local/share/opencode/auth.json (jq .[\"opencode-go\"].key), curl -m10 to https://opencode.ai/zen/go/v1/usage with Bearer token, and sqlite3 -readonly query on opencode.db for last 7 days tokens/cost; takes no arguments, no sanitization needed"
+      }
+    ]
+  }
 }

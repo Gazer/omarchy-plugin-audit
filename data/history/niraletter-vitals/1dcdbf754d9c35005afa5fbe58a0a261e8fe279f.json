@@ -5,7 +5,7 @@
   "commit": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
   "commitShort": "1dcdbf7",
   "commitUrl": "https://github.com/niraletter/vitals/commit/1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
-  "scannedAt": "2026-08-25T10:38:48.521Z",
+  "scannedAt": "2026-08-25T11:14:46.052Z",
   "fromCommit": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
   "fromCommitShort": "1dcdbf7",
   "installCommand": "omarchy plugin add https://github.com/niraletter/vitals.git --enable",
@@ -163,5 +163,26 @@
   "score": 2,
   "riskLevel": "low",
   "obfuscationFlag": false,
-  "llmAnalysis": null
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T11:14:46.052Z",
+    "overallRisk": "low",
+    "summary": "Plugin is a comprehensive system monitor with no malicious behavior. The sole auto-flagged finding is a false positive, and all privileged operations (proc polling, GPU tools, process termination) require explicit user interaction or system auth via pkexec.",
+    "whatItDoes": "Shows a bar widget with a pinned metric (CPU, memory, network, etc.) and a dashboard with 6 tiles, per-core CPU load, graphs, storage, GPU details and a sortable/filterable process list. Users can expand tiles, pin a metric to the bar, adjust polling interval, and terminate/force-kill processes after a confirmation dialog.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant BarWidget\n    participant Panel\n    participant System as System ProcFS/Tools\n    participant Priv as pkexec\n    User->>BarWidget: Click widget (toggle/middle-click refresh)\n    BarWidget->>Panel: Loader source Qt.resolvedUrl(\"Panel.qml\")\n    Panel->>System: Poll cat /proc/stat,/proc/meminfo, sensors -j, lspci, df, ip, ss, nvidia-smi/intel_gpu_top\n    System-->>Panel: parseCpu/Memory/Network/GPU -> update tiles, graphs, tooltip\n    User->>Panel: Terminate/Force kill process (confirm dialog)\n    Panel->>System: kill -TERM/-KILL <pid>\n    Panel->>Priv: pkexec pacman/apt-get/dnf install intel-gpu-tools or setcap cap_perfmon (Intel GPU only)\n    Priv-->>Panel: exit code -> finishIntelGpuSetup",
+    "findings": [
+      {
+        "file": "BarWidget.qml",
+        "line": 61,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Qt.resolvedUrl(\"Panel.qml\") resolves an internal QML component for Loader.source, not a file URL for execution. Loader displays UI only; never passed to Process.command or execDetached.",
+        "relatedCode": "Loader { source: Qt.resolvedUrl(\"Panel.qml\") } BarWidget.qml:61; onLoaded injectPanel() only wires bar/settings - no execution",
+        "executableContext": "Not an executable. Panel.qml is the plugin's own dashboard UI (imported as QML). No args, no sanitization needed; distinct from exec wrappers like mx-ctl/solaar."
+      }
+    ]
+  }
 }

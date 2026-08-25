@@ -5,7 +5,7 @@
   "commit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "commitShort": "6d9184a",
   "commitUrl": "https://github.com/gastonmira/omarchy-mx-master/commit/6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-  "scannedAt": "2026-08-25T10:38:43.824Z",
+  "scannedAt": "2026-08-25T11:13:32.673Z",
   "fromCommit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "fromCommitShort": "6d9184a",
   "installCommand": "omarchy plugin add https://github.com/gastonmira/omarchy-mx-master.git --enable",
@@ -120,5 +120,38 @@
   "score": 4,
   "riskLevel": "low",
   "obfuscationFlag": false,
-  "llmAnalysis": null
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T11:13:32.673Z",
+    "overallRisk": "low",
+    "summary": "Well-hardened bar widget that wraps bundled helpers (mx-ctl/mx-buttons → solaar) with strict caps, plain-text sanitization and safe bash positional parameters. No unauthenticated IPC or injection surface; only intentional local code execution is the user-typed Custom button command which is explicitly user-authorized.",
+    "whatItDoes": "Bar widget and panel for a Bluetooth-paired Logitech MX Master 3S. Shows connection/battery/host and lets the user tune DPI, SmartShift threshold, scroll ratchet/invert/hi-res and reassign thumb/gesture buttons. All writes go to the mouse's onboard memory via Solaar, so they persist across reboots and travel with the mouse to its other paired hosts.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel as Panel.qml\n    participant Ctl as mx-ctl (bash)\n    participant Btn as mx-buttons (python)\n    participant Solaar\n    participant Mouse as MX Master 3S\n    User->>Panel: open panel / toggle / drag slider\n    Panel->>Ctl: Process bash -c 'MX_DEVICE=\"$1\" \"$0\" status [--battery]' ctl deviceName\n    Ctl->>Solaar: solaar config/show DEVICE\n    Solaar->>Mouse: HID++ query\n    Mouse-->>Solaar: settings + battery\n    Solaar-->>Ctl: text output\n    Ctl-->>Panel: key=value lines (capped, parseStatus)\n    Panel-->>User: render battery/DPI/hosts (Model.plain/snapDpi)\n    User->>Panel: set DPI / toggle / change-host\n    Panel->>Ctl: Process bash -c 'MX_DEVICE=\"$1\" \"$0\" set \"$2\" \"$3\"' ctl deviceName key value\n    Ctl->>Solaar: solaar config DEVICE key value\n    Solaar->>Mouse: write onboard memory\n    User->>Panel: set button action (incl. Custom command)\n    Panel->>Btn: Process bash -c 'MX_DEVICE=\"$1\" \"$0\" set ...' buttonsCtl deviceName name action command\n    Btn->>Solaar: solaar config divert-keys/reprogrammable-keys + regenerate ~/.config/solaar/rules.yaml (yaml_str escaped)\n    Btn->>Solaar: restart daemon (SIGTERM + Popen hide)\n    Note over Btn,Solaar: Later button press → Solaar Execute: [bash,-c, command]",
+    "findings": [
+      {
+        "file": "Panel.qml",
+        "line": 16,
+        "pattern": "ipcTarget",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Registers bar-widget IPC name for Omarchy shell routing; no custom message handler or payload parsing is defined in Panel.qml (no onIpc/message handler), so static flag's assumed conditional validation does not apply – exposure is inherent to framework and benign here.",
+        "relatedCode": "Panel { moduleName: \"mxmaster.panel\" ipcTarget: \"mxmaster.panel\" }",
+        "executableContext": ""
+      },
+      {
+        "file": "Panel.qml",
+        "line": 29,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": false,
+        "isMalicious": false,
+        "reasoning": "Not just a path resolve – Qt.resolvedUrl(\"mx-ctl\") (and line 88 \"mx-buttons\") locates bundled executables later run via Process command with safe bash -c 'MX_DEVICE=\"$1\" \"$0\" ...' positional-arg pattern; args (deviceName, keys, snapped DPI) are quoted as \"$1\"/\"$2\"/\"$3\" and capped via Model.capInput/plain, so no shell injection despite being an exec sink.",
+        "relatedCode": "readonly property string ctl: String(Qt.resolvedUrl(\"mx-ctl\")).replace(\"file://\", \"\") // used as statusProc.command = [\"bash\",\"-c\",\"MX_DEVICE=\\\"$1\\\" \\\"$0\\\" status --battery\", root.ctl, root.deviceName] and writeProc/buttonSetProc/buttonsProc similarly with root.buttonsCtl",
+        "executableContext": "mx-ctl is bundled bash wrapper around `solaar config/show` that reads/writes MX Master settings (dpi, smart-shift, scroll modes, change-host) to the mouse's onboard memory and queries battery; mx-buttons is bundled Python helper that maps actions.json (gestures/remap/command/custom) to solaar divert-keys/reprogrammable-keys and rebuilds ~/.config/solaar/rules.yaml with yaml_str-escaped Execute:[bash,-c, command] rules – Custom kind intentionally runs user-typed shell command on button press (user-authorized local exec, truncated to 2048 chars)"
+      }
+    ]
+  }
 }

@@ -2,35 +2,35 @@
   "jankeesvw-omarchy-downloads": {
     "url": "https://github.com/jankeesvw/omarchy-downloads",
     "lastScanned": "3a4831032fccc24173533f7adeda4bffb5dcb664",
-    "lastScannedAt": "2026-08-25T10:38:41.868Z",
+    "lastScannedAt": "2026-08-25T11:12:48.624Z",
     "lastRisk": "medium",
     "lastScore": 8
   },
   "gastonmira-omarchy-mx-master": {
     "url": "https://github.com/gastonmira/omarchy-mx-master",
     "lastScanned": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-    "lastScannedAt": "2026-08-25T10:38:43.824Z",
+    "lastScannedAt": "2026-08-25T11:13:32.673Z",
     "lastRisk": "low",
     "lastScore": 4
   },
   "M4Marvin-omarchy-plugin-opencode-go": {
     "url": "https://github.com/M4Marvin/omarchy-plugin-opencode-go",
     "lastScanned": "3594b52ff2c66d97b3b9866fb771441f1b4c3b7f",
-    "lastScannedAt": "2026-08-25T10:38:46.139Z",
+    "lastScannedAt": "2026-08-25T11:14:13.691Z",
     "lastRisk": "medium",
     "lastScore": 13
   },
   "niraletter-vitals": {
     "url": "https://github.com/niraletter/vitals",
     "lastScanned": "1dcdbf754d9c35005afa5fbe58a0a261e8fe279f",
-    "lastScannedAt": "2026-08-25T10:38:48.521Z",
+    "lastScannedAt": "2026-08-25T11:14:46.052Z",
     "lastRisk": "low",
     "lastScore": 2
   },
   "NachoRodriguezM-omarchy-google-calendar-clock": {
     "url": "https://github.com/NachoRodriguezM/omarchy-google-calendar-clock",
     "lastScanned": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
-    "lastScannedAt": "2026-08-25T10:38:50.805Z",
+    "lastScannedAt": "2026-08-25T11:15:32.917Z",
     "lastRisk": "high",
     "lastScore": 19
   }
