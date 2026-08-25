@@ -13,61 +13,181 @@ export async function getStaticPaths() {
 }
 
 const { report } = Astro.props;
+const hasLlm = !!report.llmAnalysis;
+const riskColor: Record<string,string> = {
+  safe: 'from-slate-50 to-slate-100 border-slate-200',
+  low: 'from-emerald-50 to-teal-50 border-emerald-200',
+  medium: 'from-amber-50 to-yellow-50 border-amber-200',
+  high: 'from-orange-50 to-red-50 border-orange-200',
+  critical: 'from-red-50 to rose-50 border-red-200',
+};
 ---
-
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Report for {report.slug} @ {report.commitShort} — Omarchy Plugin Audit</title>
+  <title>{report.slug} @ {report.commitShort} — Omarchy Plugin Audit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; color: #111; }
-    a { color: #2563eb; }
-    code { background: #f3f4f6; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    :root { --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #0f172a; --muted: #64748b; }
+    * { box-sizing: border-box; }
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .muted { color: var(--muted); }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1rem; }
+    details > summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] > summary { margin-bottom: 0.75rem; }
+    code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 6px; font-size: 0.85em; }
   </style>
 </head>
 <body>
-  <a href="/">← Back to overview</a>
-  <h1>{report.slug} <RiskBadge level={report.riskLevel} /></h1>
-  <p>
-    Commit: <a href={report.commitUrl} target="_blank">{report.commit}</a> ({report.commitShort}) — Scanned: {new Date(report.scannedAt).toLocaleString()}
-    {report.obfuscationFlag && <span style="color:red; font-weight:bold;"> — Possible obfuscation</span>}
-  </p>
-  {report.fromCommit ? (
-    <p>Changed files since <a href={`${report.url}/compare/${report.fromCommit}...${report.commit}`} target="_blank">{report.fromCommitShort}...{report.commitShort}</a></p>
-  ) : (
-    <p>First scan — all files are new.</p>
-  )}
-  <p>Score: <strong>{report.score}</strong> — Risk: <strong>{report.riskLevel}</strong></p>
+  <div class="container">
+    <!-- Top nav -->
+    <a href="/" class="text-sm muted">← Back to overview</a>
 
-  <ObfuscationAlert flag={report.obfuscationFlag} findings={report.obfuscation} />
+    <!-- Hero -->
+    <div class={`mt-6 rounded-2xl border bg-gradient-to-br p-6 md:p-8 ${riskColor[report.riskLevel] || riskColor.medium}`}>
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-3 flex-wrap">
+            {report.slug}
+            <RiskBadge level={report.riskLevel} />
+          </h1>
+          <p class="text-sm muted mt-2">
+            <a href={report.url} target="_blank" class="font-mono">{report.url.replace('https://github.com/','')}</a>
+            <span class="mx-2">•</span>
+            <a href={report.commitUrl} target="_blank" class="font-mono" title={report.commit}>{report.commitShort}</a>
+            <span class="mx-2">•</span>
+            Scanned {new Date(report.scannedAt).toLocaleString()}
+          </p>
+          {report.fromCommit ? (
+            <p class="text-sm mt-1">
+              Changed since <a href={`${report.url}/compare/${report.fromCommit}...${report.commit}`} target="_blank" class="font-mono">{report.fromCommitShort}…{report.commitShort}</a>
+              <span class="muted">({report.diff.filesChanged.length} files, {report.diff.commits.length} commits)</span>
+            </p>
+          ) : (
+            <p class="text-sm muted mt-1">First scan — all files are new</p>
+          )}
+        </div>
+        <div class="flex gap-3 text-center">
+          <div class="bg-white rounded-xl border px-4 py-3 min-w-[84px]">
+            <div class="text-xs uppercase tracking-wider muted">Score</div>
+            <div class="text-xl font-bold">{report.score}</div>
+          </div>
+          <div class="bg-white rounded-xl border px-4 py-3 min-w-[84px]">
+            <div class="text-xs uppercase tracking-wider muted">Findings</div>
+            <div class="text-xl font-bold">{report.findings.length}</div>
+          </div>
+          <div class="bg-white rounded-xl border px-4 py-3 min-w-[84px]">
+            <div class="text-xs uppercase tracking-wider muted">Files</div>
+            <div class="text-xl font-bold">{report.fileTree.length}</div>
+          </div>
+        </div>
+      </div>
+      {report.obfuscationFlag && (
+        <div class="mt-4 bg-red-600 text-white text-sm rounded-lg px-3 py-2">⚠ Possible obfuscation detected — review carefully</div>
+      )}
+    </div>
 
-  <LlmAnalysis llmAnalysis={report.llmAnalysis} />
+    <!-- AI analysis (useful) -->
+    <LlmAnalysis llmAnalysis={report.llmAnalysis} />
 
-  <h2>Operations Summary</h2>
-  <p class="text-sm text-gray-600">Risk-relevant operations only (expected imports excluded, shown separately below).</p>
-  <FindingsTable findings={report.findings} title="Risk-Relevant Findings" />
+    <!-- Useful: risk-relevant findings as prominent cards (if no LLM, show static findings nicely) -->
+    {!hasLlm && (
+      <div class="mt-8">
+        <h2 class="text-lg font-semibold mb-3">What matters — risk-relevant findings</h2>
+        {report.findings.length === 0 ? (
+          <div class="card">
+            <p class="text-sm muted">No risk-relevant findings. Only expected imports and file reads.</p>
+          </div>
+        ) : (
+          <div class="grid gap-3">
+            {report.findings.map((f: any) => (
+              <div class="card flex flex-col gap-1.5">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class={`text-xs font-bold px-2 py-1 rounded-full border ${f.severity==='critical' ? 'bg-red-50 text-red-700 border-red-200' : f.severity==='high' ? 'bg-orange-50 text-orange-700 border-orange-200' : 'bg-amber-50 text-amber-800 border-amber-200'}`}>{f.severity}</span>
+                  <span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded">{f.file}:{f.line}</span>
+                  <span class="text-xs text-slate-500">{f.pattern} • {f.category}</span>
+                </div>
+                <p class="text-sm font-medium">{f.description}</p>
+                <code class="text-xs block bg-slate-50 border p-2 rounded overflow-x-auto">{f.snippet}</code>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
 
-  <h2>Network Calls</h2>
-  <FindingsTable findings={report.inventory.networkCalls} title="Network Calls" />
+    <!-- Always useful: process & network -->
+    <div class="grid md:grid-cols-2 gap-4 mt-6">
+      <div class="card">
+        <h3 class="font-semibold text-sm mb-2">Process execution</h3>
+        {report.inventory.processes.length === 0 ? (
+          <p class="text-sm muted">No process execution detected — good.</p>
+        ) : (
+          <ul class="text-sm space-y-1">
+            {report.inventory.processes.map((f: any) => (
+              <li class="flex gap-2"><span class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">{f.file}:{f.line}</span><span>{f.description}</span></li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div class="card">
+        <h3 class="font-semibold text-sm mb-2">Network</h3>
+        {report.inventory.networkCalls.length === 0 ? (
+          <p class="text-sm muted">No network calls — good.</p>
+        ) : (
+          <ul class="text-sm space-y-1">
+            {report.inventory.networkCalls.map((f: any) => (
+              <li class="flex gap-2"><span class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">{f.file}:{f.line}</span><span>{f.description}</span></li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
 
-  <h2>Files Opened</h2>
-  <FindingsTable findings={report.inventory.fileOps} title="Files Opened" />
+    <!-- Changed files — useful, keep visible -->
+    <div class="card mt-6">
+      <h3 class="font-semibold mb-2">Changed files</h3>
+      <DiffView files={report.diff.filesChanged} commits={report.diff.commits} />
+    </div>
 
-  <h2>Process Execution</h2>
-  <FindingsTable findings={report.inventory.processes} title="Process Execution" />
+    <!-- Obfuscation -->
+    <div class="mt-6">
+      <ObfuscationAlert flag={report.obfuscationFlag} findings={report.obfuscation} />
+    </div>
 
-  <h2>Expected Imports</h2>
-  <p class="text-sm text-gray-600">Normal Quickshell / local module imports — expected for Omarchy plugins, not counted as risk (informational only).</p>
-  <FindingsTable findings={report.inventory.imports} title="Expected Imports" />
+    <!-- Noise — collapsed by default -->
+    <div class="mt-8 space-y-3">
+      <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Details — hidden by default</h2>
 
-  <h2>Changed Files</h2>
-  <DiffView files={report.diff.filesChanged} commits={report.diff.commits} />
+      <details>
+        <summary>Files opened ({report.inventory.fileOps.length}) — FolderListModel, StandardPaths</summary>
+        <FindingsTable findings={report.inventory.fileOps} title="Files Opened" />
+      </details>
 
-  <h2>File Tree</h2>
-  <FileTree files={report.fileTree} />
+      <details>
+        <summary>Expected imports ({report.inventory.imports.length}) — normal for Omarchy plugins</summary>
+        <p class="text-xs muted mb-2">These are expected Quickshell imports, not counted as risk.</p>
+        <FindingsTable findings={report.inventory.imports} title="Expected Imports" />
+      </details>
 
-  <hr class="my-8" />
-  <p class="text-xs text-gray-500">Generated by omarchy-audit at {report.scannedAt}. Commit hash is linked to GitHub for verification.</p>
+      <details>
+        <summary>Full file tree ({report.fileTree.length} files)</summary>
+        <FileTree files={report.fileTree} />
+      </details>
+
+      <details>
+        <summary>Raw static findings ({report.findings.length}) — table view</summary>
+        <FindingsTable findings={report.findings} title="Risk-Relevant Findings (raw)" />
+      </details>
+    </div>
+
+    <hr class="my-8 border-slate-200" />
+    <p class="text-xs muted">Generated by omarchy-audit at {report.scannedAt} • Commit <a href={report.commitUrl} class="font-mono">{report.commitShort}</a> linked to GitHub for verification • <a href="/">Overview</a></p>
+  </div>
 </body>
 </html>

@@ -19,6 +19,8 @@ export type LlmAnalysis = {
   model: string;
   generatedAt: string;
   summary: string;
+  whatItDoes: string;
+  sequenceDiagram: string;
   findings: LlmFindingReview[];
   overallRisk: 'safe' | 'low' | 'medium' | 'high' | 'critical';
 };
@@ -71,12 +73,17 @@ For EACH static finding, analyze its surrounding code (within the file) and dete
 - Provide a refinedSeverity (critical/high/medium/low/info), isBenign, isMalicious, and reasoning (1-2 sentences, English).
 - If the finding relates to an executable (e.g., mx-ctl, mx-buttons), describe the executableContext: what it does and whether args appear sanitized.
 
-Also provide an overallRisk summary for the plugin.
+Also provide:
+- overallRisk summary
+- whatItDoes: 2-3 sentence plain-English explanation of what the plugin actually does (user-facing behavior, not just code)
+- sequenceDiagram: Mermaid sequenceDiagram code showing the main flow (e.g., user -> Panel -> ctl -> mx-ctl -> solaar -> mouse). Use Mermaid syntax, start with "sequenceDiagram". Keep it short (5-10 steps), focus on useful flow, hide noise.
 
 Return ONLY valid JSON, no markdown, no explanation outside JSON, with this exact shape:
 {
   "overallRisk": "safe|low|medium|high|critical",
   "summary": "1-3 sentence overall assessment in English",
+  "whatItDoes": "What the plugin does for the user, 2-3 sentences",
+  "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel\n    ...",
   "findings": [
     {
       "file": "Panel.qml",
@@ -181,7 +188,7 @@ export async function runLlmAnalysis(prompt: string, opts?: { model?: string; ti
   });
 }
 
-export function parseLlmResponse(raw: string): { overallRisk: string; summary: string; findings: LlmFindingReview[] } {
+export function parseLlmResponse(raw: string): { overallRisk: string; summary: string; whatItDoes: string; sequenceDiagram: string; findings: LlmFindingReview[] } {
   // Extract JSON from markdown fences if present
   let jsonStr = raw.trim();
   const fenceMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
@@ -194,6 +201,8 @@ export function parseLlmResponse(raw: string): { overallRisk: string; summary: s
   return {
     overallRisk: parsed.overallRisk || 'medium',
     summary: parsed.summary || '',
+    whatItDoes: parsed.whatItDoes || '',
+    sequenceDiagram: parsed.sequenceDiagram || '',
     findings: (parsed.findings || []).map((f: any) => ({
       file: f.file,
       line: f.line,

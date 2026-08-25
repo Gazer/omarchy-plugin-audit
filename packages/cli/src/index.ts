@@ -118,6 +118,8 @@ program
           generatedAt: new Date().toISOString(),
           overallRisk: parsedLlm.overallRisk,
           summary: parsedLlm.summary,
+          whatItDoes: parsedLlm.whatItDoes,
+          sequenceDiagram: parsedLlm.sequenceDiagram,
           findings: parsedLlm.findings,
         };
         console.log(pc.green(`AI review complete: ${llmAnalysis.overallRisk} — ${llmAnalysis.summary.slice(0, 120)}`));

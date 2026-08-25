@@ -39,6 +39,8 @@ export const LlmAnalysisSchema = z
     generatedAt: z.string(),
     overallRisk: z.enum(['safe', 'low', 'medium', 'high', 'critical']),
     summary: z.string(),
+    whatItDoes: z.string().optional(),
+    sequenceDiagram: z.string().optional(),
     findings: z.array(LlmFindingReviewSchema),
   })
   .nullable();
