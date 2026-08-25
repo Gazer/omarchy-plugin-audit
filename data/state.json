@@ -26,5 +26,12 @@
     "lastScannedAt": "2026-08-25T09:55:14.423Z",
     "lastRisk": "low",
     "lastScore": 2
+  },
+  "NachoRodriguezM-omarchy-google-calendar-clock": {
+    "url": "https://github.com/NachoRodriguezM/omarchy-google-calendar-clock",
+    "lastScanned": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
+    "lastScannedAt": "2026-08-25T10:18:22.890Z",
+    "lastRisk": "high",
+    "lastScore": 19
   }
 }

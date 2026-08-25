@@ -1,0 +1,469 @@
+{
+  "slug": "NachoRodriguezM-omarchy-google-calendar-clock",
+  "url": "https://github.com/NachoRodriguezM/omarchy-google-calendar-clock",
+  "commit": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
+  "commitShort": "14cf448",
+  "commitUrl": "https://github.com/NachoRodriguezM/omarchy-google-calendar-clock/commit/14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
+  "scannedAt": "2026-08-25T10:18:22.890Z",
+  "fromCommit": null,
+  "fromCommitShort": null,
+  "diff": {
+    "filesChanged": [
+      {
+        "status": "A",
+        "path": ".github/workflows/release.yml"
+      },
+      {
+        "status": "A",
+        "path": ".gitignore"
+      },
+      {
+        "status": "A",
+        "path": "BarWidget.qml"
+      },
+      {
+        "status": "A",
+        "path": "CalendarModel.js"
+      },
+      {
+        "status": "A",
+        "path": "LICENSE"
+      },
+      {
+        "status": "A",
+        "path": "Model.js"
+      },
+      {
+        "status": "A",
+        "path": "NOTICE.md"
+      },
+      {
+        "status": "A",
+        "path": "Panel.qml"
+      },
+      {
+        "status": "A",
+        "path": "Preview.png"
+      },
+      {
+        "status": "A",
+        "path": "Preview2.png"
+      },
+      {
+        "status": "A",
+        "path": "Preview3.png"
+      },
+      {
+        "status": "A",
+        "path": "README.md"
+      },
+      {
+        "status": "A",
+        "path": "manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "patches/caldir-google.patch"
+      },
+      {
+        "status": "A",
+        "path": "release-assets/.gitkeep"
+      },
+      {
+        "status": "A",
+        "path": "release-assets/v0.1.7.json"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-auth-mode"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-cache-read"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-cache-update"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-caldir"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-colors"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-create"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-events"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-mutate"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-notify"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-pull"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-push"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-runtime-check"
+      },
+      {
+        "status": "A",
+        "path": "scripts/calendar-status"
+      },
+      {
+        "status": "A",
+        "path": "setup"
+      },
+      {
+        "status": "A",
+        "path": "uninstall"
+      }
+    ],
+    "commits": [
+      {
+        "sha": "14cf4489cc5dbb26871d9cd05acfa369da1f9dde",
+        "message": "Record v0.1.7 release asset hashes",
+        "author": "github-actions[bot]",
+        "date": "2026-08-21T13:53:12Z"
+      },
+      {
+        "sha": "3df3fe3dba8d0af0de77892a0e35e873ec9ab699",
+        "message": "Fix release asset hash manifest",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-21T10:47:25-03:00"
+      },
+      {
+        "sha": "20451cc239f163b048d665a0f8dc6bdce4585f86",
+        "message": "Record v0.1.7 release asset hashes",
+        "author": "github-actions[bot]",
+        "date": "2026-08-21T13:44:28Z"
+      },
+      {
+        "sha": "9b1f648a4679a32fc142708ffa97435c18e81e0a",
+        "message": "Bind release assets to committed hashes",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-21T10:37:41-03:00"
+      },
+      {
+        "sha": "917aa5f02023a2b47107665c0b8b7c91a29a6822",
+        "message": "Update Caldir to v0.12.0",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-20T17:58:48-03:00"
+      },
+      {
+        "sha": "9cd98b232d26b2e852fb646eb76a5e0bbab73aec",
+        "message": "Include preview images in README",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-20T17:51:01-03:00"
+      },
+      {
+        "sha": "43c34dc3b23757914b6a4f51546cd25a12a9f567",
+        "message": "Added preview image",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-20T17:50:13-03:00"
+      },
+      {
+        "sha": "40bd9be9988134e9240f40c8e2a2d1d21411fef8",
+        "message": "Add files via upload",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-20T17:43:54-03:00"
+      },
+      {
+        "sha": "62539ce9cb46103601889a361df559ae90d2e2d0",
+        "message": "Update README with clearer removal instructions",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-20T17:12:45-03:00"
+      },
+      {
+        "sha": "ecce33f77ae62f121b30c286c82562e584efce73",
+        "message": "Simplify Omarchy installation guidance",
+        "author": "Ignacio Rodriguez",
+        "date": "2026-08-20T10:26:58-03:00"
+      }
+    ],
+    "stats": {
+      "added": 31,
+      "modified": 0,
+      "deleted": 0
+    }
+  },
+  "fileTree": [
+    {
+      "path": "BarWidget.qml",
+      "lines": 187,
+      "size": 6436,
+      "type": "qml"
+    },
+    {
+      "path": "CalendarModel.js",
+      "lines": 153,
+      "size": 5375,
+      "type": "js"
+    },
+    {
+      "path": "Model.js",
+      "lines": 297,
+      "size": 10983,
+      "type": "js"
+    },
+    {
+      "path": "Panel.qml",
+      "lines": 2863,
+      "size": 113094,
+      "type": "qml"
+    },
+    {
+      "path": "manifest.json",
+      "lines": 22,
+      "size": 586,
+      "type": "json"
+    },
+    {
+      "path": "release-assets/v0.1.7.json",
+      "lines": 10,
+      "size": 416,
+      "type": "json"
+    }
+  ],
+  "inventory": {
+    "fileOps": [
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "BarWidget.qml",
+        "line": 121,
+        "column": 13,
+        "snippet": "source: Qt.resolvedUrl(\"Panel.qml\")",
+        "description": "Resolves file URL"
+      },
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "Panel.qml",
+        "line": 203,
+        "column": 22,
+        "snippet": "var url = String(Qt.resolvedUrl(\"scripts/\" + name))",
+        "description": "Resolves file URL"
+      }
+    ],
+    "networkCalls": [
+      {
+        "severity": "high",
+        "category": "network",
+        "pattern": "Qt.openUrlExternally",
+        "file": "Panel.qml",
+        "line": 2540,
+        "column": 25,
+        "snippet": "Qt.openUrlExternally(agendaEvent.meetingLinks[0])",
+        "description": "Opens external URL"
+      }
+    ],
+    "processes": [
+      {
+        "severity": "high",
+        "category": "ipc",
+        "pattern": "ipcTarget",
+        "file": "BarWidget.qml",
+        "line": 129,
+        "column": 3,
+        "snippet": "IpcHandler {",
+        "description": "IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)"
+      },
+      {
+        "severity": "high",
+        "category": "ipc",
+        "pattern": "ipcTarget",
+        "file": "Panel.qml",
+        "line": 23,
+        "column": 3,
+        "snippet": "ipcTarget: \"omarchy-google-calendar-clock\"",
+        "description": "IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)"
+      }
+    ],
+    "imports": [
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "BarWidget.qml",
+        "line": 2,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "BarWidget.qml",
+        "line": 4,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Panel.qml",
+        "line": 3,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "Panel.qml",
+        "line": 5,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "BarWidget.qml",
+      "line": 121,
+      "column": 13,
+      "snippet": "source: Qt.resolvedUrl(\"Panel.qml\")",
+      "description": "Resolves file URL"
+    },
+    {
+      "severity": "high",
+      "category": "ipc",
+      "pattern": "ipcTarget",
+      "file": "BarWidget.qml",
+      "line": 129,
+      "column": 3,
+      "snippet": "IpcHandler {",
+      "description": "IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)"
+    },
+    {
+      "severity": "high",
+      "category": "ipc",
+      "pattern": "ipcTarget",
+      "file": "Panel.qml",
+      "line": 23,
+      "column": 3,
+      "snippet": "ipcTarget: \"omarchy-google-calendar-clock\"",
+      "description": "IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "Panel.qml",
+      "line": 203,
+      "column": 22,
+      "snippet": "var url = String(Qt.resolvedUrl(\"scripts/\" + name))",
+      "description": "Resolves file URL"
+    },
+    {
+      "severity": "high",
+      "category": "network",
+      "pattern": "Qt.openUrlExternally",
+      "file": "Panel.qml",
+      "line": 2540,
+      "column": 25,
+      "snippet": "Qt.openUrlExternally(agendaEvent.meetingLinks[0])",
+      "description": "Opens external URL"
+    }
+  ],
+  "obfuscation": [],
+  "score": 19,
+  "riskLevel": "high",
+  "obfuscationFlag": false,
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-25T10:18:22.890Z",
+    "overallRisk": "low",
+    "summary": "Plugin is local-first calendar with safe IPC surface and bundled helper scripts; all Process invocations use fixed literals and validated args, and external URL opening is user-initiated https-only, leaving no arbitrary code or injection surface.",
+    "whatItDoes": "Shows a clock in the bar (click to open month grid with ISO week numbers) and a calendar agenda below it. Events are stored locally in Caldir ICS files and synced to Google on explicit pull/push actions; users can create/edit/delete local events, view meeting links, and receive 5-minute desktop reminders.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant BarWidget\n    participant Panel\n    participant Helper as HelperScript\n    participant Caldir as Caldir/Google\n    participant Browser\n    User->>BarWidget: click clock / IPC summon\n    BarWidget->>Panel: open() / Loader Panel.qml\n    Panel->>Helper: Process [helperPath(\"calendar-cache-read\")] \n    Helper->>Caldir: read ~/.local/state/omarchy/calendar-cache.json\n    Caldir-->>Panel: events + range (JSON)\n    Panel-->>User: month grid + agenda dots\n    User->>Panel: click JOIN\n    Panel->>Browser: Qt.openUrlExternally(meetingLinks[0])\n    User->>Panel: Pull/Push click\n    Panel->>Helper: Process [helperPath(\"calendar-pull/push\")]\n    Helper->>Caldir: caldir pull/push + cache-update",
+    "findings": [
+      {
+        "file": "BarWidget.qml",
+        "line": 121,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Constant Qt.resolvedUrl(\"Panel.qml\") used only as Loader source for internal QML panel; not an executable and not user-controlled.",
+        "relatedCode": "Loader { source: Qt.resolvedUrl(\"Panel.qml\") } Panel.qml:121",
+        "executableContext": "Not executable - QML component loading, no Process or execDetached usage"
+      },
+      {
+        "file": "BarWidget.qml",
+        "line": 129,
+        "pattern": "ipcTarget",
+        "originalSeverity": "high",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "IpcHandler target \"omarchy-google-calendar-clock\" exposes 9 fixed no-arg functions (refresh, cycleFormat, toggleWeekStart, open/close/show/hide/toggle, refreshCalendar, calendarStatus); no payload is parsed or forwarded to shell/Process, so arbitrary IPC cannot inject args.",
+        "relatedCode": "IpcHandler { target: \"omarchy-google-calendar-clock\" } function refresh(): void { root.broadcast(\"refresh\") } ... function calendarStatus(): string { return panelLoader.item.calendarStatus() } BarWidget.qml:129-145",
+        "executableContext": "IPC dispatch only to local UI functions; calendarStatus returns JSON, refreshCalendar triggers helperPath(\"calendar-cache-read\") with fixed args"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 23,
+        "pattern": "ipcTarget",
+        "originalSeverity": "high",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Panel declares ipcTarget but immediately sets manageIpc: false, so it registers no handler; actual IPC is handled solely by BarWidget.qml IpcHandler.",
+        "relatedCode": "Panel { ipcTarget: \"omarchy-google-calendar-clock\" manageIpc: false } Panel.qml:22-24",
+        "executableContext": "No executable - declarative IPC routing disabled on this component"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 203,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "helperPath() resolves bundled scripts/ binaries via Qt.resolvedUrl(\"scripts/\"+name); value is always used as Process.command[0] but name is only ever hardcoded literals (calendar-*) not user IPC/settings, so no path injection.",
+        "relatedCode": "helperPath(\"calendar-pull\") -> calendarPullProcess.command = [root.helperPath(\"calendar-pull\"), \"--pending\", ...] Panel.qml:803; helperPath(\"calendar-create\"), \"calendar-mutate\", \"calendar-push\", \"calendar-status\", \"calendar-notify\", \"calendar-auth-mode\", \"calendar-runtime-check\" all literal",
+        "executableContext": "Locates bundled executables: calendar-cache-read, calendar-pull/push, calendar-create/mutate, calendar-status, calendar-notify, calendar-auth-mode, calendar-runtime-check; args validated (date regex YYYY-MM-DD, title newline check, repeat COUNT 2-999, Util.shellQuote for bar.run setup/uninstall)"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 2540,
+        "pattern": "Qt.openUrlExternally",
+        "originalSeverity": "high",
+        "refinedSeverity": "low",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Opens agendaEvent.meetingLinks[0] only on explicit JOIN button click; meetingLinks derived from CalendarModel.eventMeetingLinks which extracts only https?:// URLs via URL_PATTERN and prioritizes conference hosts, limiting to https.",
+        "relatedCode": "property var meetingLinks: CalendarModel.eventMeetingLinks(modelData) CalendarModel.js:90; Qt.openUrlExternally(agendaEvent.meetingLinks[0]) Panel.qml:2540 inside onClicked: { ... root.close() }",
+        "executableContext": "External URL open via system browser/xdg-open, not local command execution; URL source is calendar event conference_url/location/description, user-initiated, https-only"
+      }
+    ]
+  }
+}
