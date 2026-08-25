@@ -43,7 +43,7 @@ export function buildLlmPrompt(opts: {
 
   const filesBlock = Object.entries(fileContents)
     .map(([file, content]) => {
-      const truncated = content.split('\n').slice(0, 250).join('\n');
+      const truncated = content.split('\n').slice(0, 120).join('\n');
       return `--- FILE: ${file} ---\n${truncated}\n--- END FILE ---`;
     })
     .join('\n\n');
@@ -98,9 +98,10 @@ export async function runLlmAnalysis(prompt: string, opts?: { model?: string; ti
   const timeoutMs = opts?.timeoutMs; // undefined = no timeout, wait as long as needed
 
   return new Promise((resolve, reject) => {
-    const args = ['run', '-m', model, '--format', 'json', '--auto', prompt];
+    const args = ['run', '-m', model, '--format', 'json', prompt];
     const child = spawn('opencode', args, {
       env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
+      stdio: ['ignore', 'pipe', 'pipe'],
     });
 
     let stdout = '';
@@ -114,8 +115,33 @@ export async function runLlmAnalysis(prompt: string, opts?: { model?: string; ti
       }, timeoutMs);
     }
 
-    child.stdout.on('data', (d) => (stdout += d.toString()));
-    child.stderr.on('data', (d) => (stderr += d.toString()));
+    child.stdout.on('data', (d) => {
+      const chunk = d.toString();
+      stdout += chunk;
+      // Stream LLM output for visibility — parse json events and forward text
+      try {
+        const lines = chunk.split('\n').filter(Boolean);
+        for (const line of lines) {
+          const obj = JSON.parse(line);
+          if (obj.type === 'text' && obj.part?.text) {
+            process.stderr.write(obj.part.text);
+          } else if (obj.type === 'step_start') {
+            process.stderr.write('\n[llm] thinking...\n');
+          } else if (obj.type === 'step_finish') {
+            const tok = obj.part?.tokens;
+            if (tok) process.stderr.write(`\n[llm] finished — tokens ${tok.total} cost $${tok.cost?.toFixed(4) || '?'}\n`);
+          }
+        }
+      } catch {
+        // fallback: raw chunk
+        process.stderr.write(chunk);
+      }
+    });
+    child.stderr.on('data', (d) => {
+      const chunk = d.toString();
+      stderr += chunk;
+      process.stderr.write(`[llm:stderr] ${chunk}`);
+    });
 
     child.on('error', (err) => {
       if (timer) clearTimeout(timer);
@@ -179,10 +205,10 @@ export function parseLlmResponse(raw: string): { overallRisk: string; summary: s
 
 export async function collectFileContents(tmpDir: string, findings: { file: string }[]): Promise<Record<string, string>> {
   const uniqueFiles = [...new Set(findings.map((f) => f.file))];
-  // also include Panel.qml and main files even if not in findings, up to 5
+  // also include Panel.qml and main files even if not in findings, up to 4
   const extra = ['Panel.qml', 'DownloadsStore.qml', 'Model.js', 'mx-ctl', 'mx-buttons'];
   for (const e of extra) if (!uniqueFiles.includes(e)) uniqueFiles.push(e);
-  const limited = uniqueFiles.slice(0, 6);
+  const limited = uniqueFiles.slice(0, 4);
   const contents: Record<string, string> = {};
   for (const rel of limited) {
     try {
