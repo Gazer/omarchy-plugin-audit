@@ -28,50 +28,92 @@ try {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Omarchy Plugin Audit — Overview</title>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; color: #111; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
-    th { background: #f5f5f5; }
-    a { color: #2563eb; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
 </head>
-<body>
-  <h1>Omarchy Plugin Audit — Overview</h1>
-  <p class="text-sm text-gray-600">Static audit reports for Omarchy plugins. Each report shows operations, network calls, files opened, and obfuscation checks for the last scanned commit.</p>
+<body class="bg-slate-50 text-slate-900">
+  <div class="max-w-[1100px] mx-auto px-5 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold tracking-tight">Omarchy Plugin Audit</h1>
+      <p class="text-sm text-slate-500 mt-2 max-w-3xl">
+        Static + AI audit for Omarchy plugins. Static is deterministic (regex, no hallucinations); AI is contextual (refines severity, e.g., <code class="bg-white px-1 py-0.5 rounded border font-mono text-xs">Qt.resolvedUrl("mx-ctl")</code> → executable). Overview shows both — AI refines, static is fallback.
+      </p>
+    </div>
 
-  {reports.length === 0 ? (
-    <p>No reports yet. Run <code>omarchy-audit &lt;github-url&gt;</code> to generate one.</p>
-  ) : (
-    <table>
-      <thead>
-        <tr><th>Plugin</th><th>Last commit</th><th>Scanned</th><th>Risk</th><th>Score</th><th>View</th></tr>
-      </thead>
-      <tbody>
-        {reports.map((r) => (
-          <tr>
-            <td class="font-mono text-sm">{r.slug}</td>
-            <td><a href={r.commitUrl} target="_blank" rel="noopener">{r.commitShort}</a></td>
-            <td class="text-sm">{new Date(r.scannedAt).toLocaleString()}</td>
-            <td><RiskBadge level={r.riskLevel} /></td>
-            <td>{r.score}</td>
-            <td><a href={`/plugins/${r.slug}/`}>View report</a></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )}
+    {reports.length === 0 ? (
+      <div class="bg-white rounded-xl border p-8 text-center">
+        <p class="text-slate-500">No reports yet. Run <code class="bg-slate-100 px-2 py-1 rounded font-mono text-sm">omarchy-audit &lt;github-url&gt; --with-llm</code> to generate one.</p>
+      </div>
+    ) : (
+      <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 border-b">
+              <tr class="text-left text-xs uppercase tracking-wider text-slate-500">
+                <th class="px-4 py-3">Plugin</th>
+                <th class="px-4 py-3">Last commit</th>
+                <th class="px-4 py-3">Scanned</th>
+                <th class="px-4 py-3">Static risk</th>
+                <th class="px-4 py-3">AI risk</th>
+                <th class="px-4 py-3">Score</th>
+                <th class="px-4 py-3"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              {reports.map((r) => {
+                const ai = r.llmAnalysis;
+                const aiRisk = ai?.overallRisk;
+                const hasAi = !!ai;
+                const mismatch = hasAi && aiRisk !== r.riskLevel;
+                return (
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-mono text-xs font-medium">{r.slug}</td>
+                    <td class="px-4 py-3"><a href={r.commitUrl} target="_blank" rel="noopener" class="font-mono text-xs text-blue-600 hover:underline">{r.commitShort}</a></td>
+                    <td class="px-4 py-3 text-xs text-slate-500">{new Date(r.scannedAt).toLocaleString()}</td>
+                    <td class="px-4 py-3"><RiskBadge level={r.riskLevel} /></td>
+                    <td class="px-4 py-3">
+                      {hasAi ? (
+                        <div class="flex items-center gap-1.5">
+                          <RiskBadge level={aiRisk} />
+                          {mismatch && <span class="text-xs text-amber-600" title={`Static was ${r.riskLevel}, AI refined to ${aiRisk}`}>↳ refined</span>}
+                        </div>
+                      ) : (
+                        <span class="text-xs text-slate-400">— <span title="Run with --with-llm to generate">no AI</span></span>
+                      )}
+                    </td>
+                    <td class="px-4 py-3 font-medium">{r.score}</td>
+                    <td class="px-4 py-3"><a href={`/plugins/${r.slug}/`} class="text-xs font-semibold text-blue-600 hover:underline">View →</a></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div class="bg-slate-50 border-t px-4 py-3 text-xs text-slate-500">
+          Static risk is deterministic; AI risk is contextual and may be higher (e.g., <code>mx-ctl</code> executable) or lower (expected imports). When AI exists, the plugin page shows both and uses AI for the hero badge, but keeps static visible for comparison.
+        </div>
+      </div>
+    )}
 
-  {Object.keys(state).length > 0 && (
-    <>
-      <h2 class="mt-8">Tracked Plugins</h2>
-      <ul class="text-sm">
-        {Object.entries(state).map(([slug, entry]: any) => (
-          <li>{slug} — {entry.lastScanned.slice(0,7)} ({entry.lastRisk}) — <a href={entry.url}>{entry.url}</a></li>
-        ))}
-      </ul>
-    </>
-  )}
+    {reports.some((r:any)=> r.llmAnalysis) && (
+      <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <h3 class="text-sm font-semibold text-blue-900">How to trust?</h3>
+        <p class="text-sm text-blue-800/70 mt-1">Trust static for reproducibility, AI for context. If AI says <code>high</code> and static says <code>low</code> (like <code>mx-ctl</code> resolved then executed), review the AI <em>Reasoning</em> and <em>Related Code</em> on the plugin page — it should cite the exact line where <code>ctl</code> is used in <code>statusProc.command</code>. If no AI yet, the “View report” page will prompt to re-run with <code>--with-llm</code>.</p>
+      </div>
+    )}
+
+    {Object.keys(state).length > 0 && (
+      <div class="mt-8">
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Tracked Plugins (state.json)</h2>
+        <div class="bg-white rounded-xl border divide-y">
+          {Object.entries(state).map(([slug, entry]: any) => (
+            <div class="px-4 py-3 flex items-center justify-between gap-4">
+              <span class="font-mono text-xs">{slug}</span>
+              <span class="text-xs text-slate-500">{entry.lastScanned.slice(0,7)} ({entry.lastRisk}, score {entry.lastScore})</span>
+              <a href={entry.url} target="_blank" class="text-xs text-blue-600 hover:underline truncate max-w-[260px]">{entry.url}</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
 </body>
 </html>
