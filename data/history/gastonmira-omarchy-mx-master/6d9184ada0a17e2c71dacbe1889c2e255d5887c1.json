@@ -1,12 +1,15 @@
 {
   "slug": "gastonmira-omarchy-mx-master",
+  "pluginId": "mxmaster.panel",
   "url": "https://github.com/gastonmira/omarchy-mx-master",
   "commit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "commitShort": "6d9184a",
   "commitUrl": "https://github.com/gastonmira/omarchy-mx-master/commit/6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
-  "scannedAt": "2026-08-25T09:42:49.184Z",
+  "scannedAt": "2026-08-25T10:26:08.054Z",
   "fromCommit": "6d9184ada0a17e2c71dacbe1889c2e255d5887c1",
   "fromCommitShort": "6d9184a",
+  "installCommand": "omarchy plugin add https://github.com/gastonmira/omarchy-mx-master.git --enable",
+  "installCommandPinned": "omarchy plugin add https://github.com/gastonmira/omarchy-mx-master.git --enable --yes && git -C ~/.config/omarchy/plugins/mxmaster.panel checkout 6d9184ada0a17e2c71dacbe1889c2e255d5887c1 # audited commit 6d9184a",
   "diff": {
     "filesChanged": [],
     "commits": [],
@@ -117,38 +120,5 @@
   "score": 4,
   "riskLevel": "low",
   "obfuscationFlag": false,
-  "llmAnalysis": {
-    "model": "opencode-go/muse-spark-1.2-contributor",
-    "generatedAt": "2026-08-25T09:42:49.184Z",
-    "overallRisk": "low",
-    "summary": "Plugin is a legitimate system widget with careful input caps, output truncation, and shell escaping; IPC exposure is inert and bundled executables are invoked via positional parameters with no unsanitized injection path. Main privilege is intended: writing mouse settings and Solaar rules and restarting Solaar.",
-    "whatItDoes": "Shows battery, connection state and live settings for a Logitech MX Master 3S in the Omarchy bar and lets the user adjust DPI, scroll-wheel modes and SmartShift threshold. It also remaps the divertable mouse buttons to presets or custom shell commands that run via Solaar rules, writing changes to the mouse's onboard memory so they persist across reboots and hosts.",
-    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel\n    participant Ctl as mx-ctl\n    participant Btn as mx-buttons\n    participant Solaar\n    participant Mouse\n    User->>Panel: open panel / move slider / pick button action\n    Panel->>Ctl: Process bash -c MX_DEVICE=\"$1\" \"$0\" status/set (ctl, deviceName)\n    Ctl->>Solaar: solaar config/show \"$DEVICE\" (timeout 15s, head -c 64k)\n    Solaar->>Mouse: HID++ over Bluetooth/hidraw\n    Mouse-->>Solaar: settings / Battery\n    Solaar-->>Ctl: key=value lines\n    Ctl-->>Panel: stdout -> Model.parseStatus/capInput\n    Panel->>Btn: get / set button (mx-buttons get/set)\n    Btn->>Solaar: solaar config divert-keys / reprogrammable-keys\n    Btn->>Solaar: write ~/.config/solaar/rules.yaml (yaml_str escaped) + SIGTERM/restart",
-    "findings": [
-      {
-        "file": "Panel.qml",
-        "line": 16,
-        "pattern": "ipcTarget",
-        "originalSeverity": "medium",
-        "refinedSeverity": "info",
-        "isBenign": true,
-        "isMalicious": false,
-        "reasoning": "Sets ipcTarget but defines no IpcHandler/onMessage; no custom payload handler exists to validate or exploit, only base Panel lifecycle is exposed.",
-        "relatedCode": "Panel { moduleName: \"mxmaster.panel\" ipcTarget: \"mxmaster.panel\" } - no IpcHandler found in file",
-        "executableContext": ""
-      },
-      {
-        "file": "Panel.qml",
-        "line": 29,
-        "pattern": "Util.fileUrl",
-        "originalSeverity": "medium",
-        "refinedSeverity": "low",
-        "isBenign": true,
-        "isMalicious": false,
-        "reasoning": "Qt.resolvedUrl(\"mx-ctl\") (and \"mx-buttons\" at line 88) locates bundled helpers, not arbitrary files; both are later executed via Process bash -c with positional params ($0=ctl, $1=deviceName) and quoted MX_DEVICE=\"$1\", preventing injection.",
-        "relatedCode": "readonly property string ctl: String(Qt.resolvedUrl(\"mx-ctl\")).replace(\"file://\", \"\") -> statusProc.command = [\"bash\",\"-c\",\"MX_DEVICE=\\\"$1\\\" \\\"$0\\\" status --battery\", root.ctl, root.deviceName] (102-104) ; writeProc.command similarly (144)",
-        "executableContext": "mx-ctl wraps `solaar config/show` for Logitech MX Master 3S (status/battery/set, writes to mouse onboard memory); mx-buttons wraps `solaar config divert-keys/reprogrammable-keys` and regenerates ~/.config/solaar/rules.yaml with Execute: [bash,-c,command] ; args sanitized via bash positional parameters, quoted assignments, timeout/head -c caps, and yaml_str escaping; custom command via panel TextField is capped to 2048 chars and intentional user-controlled Execute."
-      }
-    ]
-  }
+  "llmAnalysis": null
 }

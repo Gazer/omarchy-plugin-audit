@@ -47,6 +47,7 @@ export const LlmAnalysisSchema = z
 
 export const ReportSchema = z.object({
   slug: z.string(),
+  pluginId: z.string(),
   url: z.string(),
   commit: z.string(),
   commitShort: z.string(),
@@ -54,6 +55,8 @@ export const ReportSchema = z.object({
   scannedAt: z.string(),
   fromCommit: z.string().nullable(),
   fromCommitShort: z.string().nullable(),
+  installCommand: z.string(),
+  installCommandPinned: z.string(),
   diff: z.object({
     filesChanged: z.array(z.object({ status: z.string(), path: z.string() })),
     commits: z.array(z.object({ sha: z.string(), message: z.string(), author: z.string(), date: z.string() })),

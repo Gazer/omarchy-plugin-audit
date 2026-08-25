@@ -99,6 +99,16 @@ program
     console.log(`Analyzing ${filesChanged.length ? filesChanged.length : 'repository'} files...`);
     const analysis = await analyzeRepo(tmpDir, slug);
 
+    // Resolve plugin id from manifest.json for pinned install command
+    let pluginId = slug;
+    try {
+      const manifestRaw = await fs.readFile(path.join(tmpDir, 'manifest.json'), 'utf8');
+      const manifest = JSON.parse(manifestRaw);
+      if (manifest.id) pluginId = manifest.id;
+    } catch {}
+    // Fallback: try to guess from slug if manifest missing
+    if (!pluginId) pluginId = slug;
+
     let llmAnalysis: any = null;
     if (opts.withLlm || opts.withLlm === true) {
       console.log(pc.cyan(`Running AI review with ${opts.llmModel}...`));
@@ -130,12 +140,18 @@ program
       }
     }
 
+    const installCommand = `omarchy plugin add ${cleanUrl}.git --enable`;
+    const installCommandPinned = `omarchy plugin add ${cleanUrl}.git --enable --yes && git -C ~/.config/omarchy/plugins/${pluginId} checkout ${actualHead} # audited commit ${actualHead.slice(0,7)}`;
+
     const report: any = {
       slug,
+      pluginId,
       url: cleanUrl,
       commit: actualHead,
       commitShort: actualHead.slice(0, 7),
       commitUrl: `${cleanUrl}/commit/${actualHead}`,
+      installCommand,
+      installCommandPinned,
       scannedAt: new Date().toISOString(),
       fromCommit: last || null,
       fromCommitShort: last ? last.slice(0, 7) : null,
@@ -170,6 +186,7 @@ program
       console.log(pc.yellow('Dry run — not writing report.'));
       console.log(`Risk: ${pc.bold(parsed.riskLevel)} Score: ${parsed.score} Findings: ${parsed.findings.length} Obfuscation: ${parsed.obfuscation.length}`);
       if (parsed.obfuscationFlag) console.log(pc.red('Flag: Possible obfuscation detected!'));
+      console.log(`Install (pinned): ${parsed.installCommandPinned}`);
       await fs.rm(tmpDir, { recursive: true, force: true });
       return;
     }
@@ -218,6 +235,7 @@ program
     console.log(pc.green(`Report written to data/reports/${slug}.json`));
     console.log(`Risk: ${pc.bold(parsed.riskLevel)} Score: ${parsed.score} Findings: ${parsed.findings.length} Obfuscation: ${parsed.obfuscation.length}`);
     if (parsed.obfuscationFlag) console.log(pc.red('Flag: Possible obfuscation detected!'));
+    console.log(`Install (pinned): ${parsed.installCommandPinned}`);
     console.log(`Historical copy: data/history/${slug}/${actualHead}.json`);
 
     await fs.rm(tmpDir, { recursive: true, force: true });
