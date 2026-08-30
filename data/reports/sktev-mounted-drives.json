@@ -1,0 +1,205 @@
+{
+  "slug": "sktev-mounted-drives",
+  "pluginId": "io.github.sktev.mounted-drives",
+  "url": "https://github.com/sktev/mounted-drives",
+  "commit": "aae8a8779c3220bd3003f47d47a4f9c2ad3175fe",
+  "commitShort": "aae8a87",
+  "commitUrl": "https://github.com/sktev/mounted-drives/commit/aae8a8779c3220bd3003f47d47a4f9c2ad3175fe",
+  "scannedAt": "2026-08-30T11:00:06.674Z",
+  "fromCommit": null,
+  "fromCommitShort": null,
+  "installCommand": "omarchy plugin add https://github.com/sktev/mounted-drives.git --enable",
+  "installCommandPinned": "omarchy plugin add https://github.com/sktev/mounted-drives.git --yes && \\\n  git -C ~/.config/omarchy/plugins/io.github.sktev.mounted-drives checkout aae8a8779c3220bd3003f47d47a4f9c2ad3175fe && \\\n  omarchy plugin enable io.github.sktev.mounted-drives # audited commit aae8a87",
+  "diff": {
+    "filesChanged": [
+      {
+        "status": "A",
+        "path": ".gitignore"
+      },
+      {
+        "status": "A",
+        "path": "LICENSE"
+      },
+      {
+        "status": "A",
+        "path": "Model.js"
+      },
+      {
+        "status": "A",
+        "path": "Panel.qml"
+      },
+      {
+        "status": "A",
+        "path": "README.md"
+      },
+      {
+        "status": "A",
+        "path": "manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "scripts/list_drives.py"
+      }
+    ],
+    "commits": [
+      {
+        "sha": "aae8a8779c3220bd3003f47d47a4f9c2ad3175fe",
+        "message": "Improve popup layout: align partitions, plain buttons, dividers",
+        "author": "Stole Kotev",
+        "date": "2026-08-26T23:23:19+02:00"
+      },
+      {
+        "sha": "8a493bb82508543f5fc921c450e4a47f755164fb",
+        "message": " Harden against udev-controlled strings; move LUKS passphrase off argv",
+        "author": "Stole Kotev",
+        "date": "2026-08-20T22:44:14+02:00"
+      },
+      {
+        "sha": "2ebe4642eedf03dfc1dbd6c46fe4685667de8d2c",
+        "message": "Rename plugin id to io.github.sktev.mounted-drives",
+        "author": "Stole Kotev",
+        "date": "2026-08-20T18:17:09+02:00"
+      },
+      {
+        "sha": "f5b1b058a8ab2fed048a37a03024a355aa8e8a8f",
+        "message": "Initial commit: Omarchy shell bar widget for external drives",
+        "author": "S.Kotev",
+        "date": "2026-08-20T00:19:55+02:00"
+      }
+    ],
+    "stats": {
+      "added": 7,
+      "modified": 0,
+      "deleted": 0
+    }
+  },
+  "fileTree": [
+    {
+      "path": "Model.js",
+      "lines": 78,
+      "size": 2616,
+      "type": "js"
+    },
+    {
+      "path": "Panel.qml",
+      "lines": 847,
+      "size": 31764,
+      "type": "qml"
+    },
+    {
+      "path": "manifest.json",
+      "lines": 51,
+      "size": 1357,
+      "type": "json"
+    }
+  ],
+  "inventory": {
+    "fileOps": [
+      {
+        "severity": "medium",
+        "category": "fileOps",
+        "pattern": "Util.fileUrl",
+        "file": "Panel.qml",
+        "line": 52,
+        "column": 39,
+        "snippet": "var cmd = [\"python3\", pathFromUrl(Qt.resolvedUrl(\"scripts/list_drives.py\"))]",
+        "description": "Resolves file URL"
+      }
+    ],
+    "networkCalls": [],
+    "processes": [
+      {
+        "severity": "high",
+        "category": "ipc",
+        "pattern": "ipcTarget",
+        "file": "Panel.qml",
+        "line": 12,
+        "column": 3,
+        "snippet": "ipcTarget: \"io.github.sktev.mounted-drives\"",
+        "description": "IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)"
+      }
+    ],
+    "imports": [
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import Quickshell",
+        "file": "Panel.qml",
+        "line": 3,
+        "column": 1,
+        "snippet": "import Quickshell",
+        "description": "Expected Quickshell import — normal for Omarchy plugins (no risk)"
+      },
+      {
+        "severity": "info",
+        "category": "imports",
+        "pattern": "import qs",
+        "file": "Panel.qml",
+        "line": 5,
+        "column": 1,
+        "snippet": "import qs.Commons",
+        "description": "Expected local module import — normal for Omarchy plugins (no risk)"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "high",
+      "category": "ipc",
+      "pattern": "ipcTarget",
+      "file": "Panel.qml",
+      "line": 12,
+      "column": 3,
+      "snippet": "ipcTarget: \"io.github.sktev.mounted-drives\"",
+      "description": "IPC handler exposure — no payload validation detected (handler may accept arbitrary IPC without checks)"
+    },
+    {
+      "severity": "medium",
+      "category": "fileOps",
+      "pattern": "Util.fileUrl",
+      "file": "Panel.qml",
+      "line": 52,
+      "column": 39,
+      "snippet": "var cmd = [\"python3\", pathFromUrl(Qt.resolvedUrl(\"scripts/list_drives.py\"))]",
+      "description": "Resolves file URL"
+    }
+  ],
+  "obfuscation": [],
+  "score": 7,
+  "riskLevel": "low",
+  "obfuscationFlag": false,
+  "llmAnalysis": {
+    "model": "opencode-go/muse-spark-1.2-contributor",
+    "generatedAt": "2026-08-30T11:00:06.660Z",
+    "overallRisk": "low",
+    "summary": "Plugin is a legitimate drive manager with no arbitrary code execution; IPC exposure is standard Omarchy panel toggle with no custom payload handler, and executable resolution points to a bundled, audited Python helper executed via Process command array with fixed args.",
+    "whatItDoes": "Shows connected external drives (USB/CD-ROM/hotplug, optionally internal NVMe/SATA) in the Omarchy bar and lets the user mount, unmount, unlock LUKS containers, open mountpoints, and safely eject/power-off disks. It auto-refreshes via udevadm block events and a fallback lsblk poll, displaying vendor/model, partition state, and errors in a popup.",
+    "sequenceDiagram": "sequenceDiagram\n    participant User\n    participant Panel as Panel.qml\n    participant Scanner as scripts/list_drives.py\n    participant LSBLK as lsblk/findmnt\n    participant UDisks as udisksctl\n    User->>Panel: Click bar icon / udev event / timer\n    Panel->>Scanner: Process command [\"python3\", \"scripts/list_drives.py\"]\n    Scanner->>LSBLK: run lsblk -J, findmnt /\n    LSBLK-->>Scanner: block device JSON\n    Scanner-->>Panel: {drives:[...]}\n    Panel->>User: Render drive cards (mount/unmount/unlock/eject)\n    User->>Panel: Mount/Unlock/Eject click (+ passphrase via stdin)\n    Panel->>UDisks: udisksctl mount/unmount/unlock/lock/power-off -b /dev/...",
+    "findings": [
+      {
+        "file": "Panel.qml",
+        "line": 12,
+        "pattern": "ipcTarget",
+        "originalSeverity": "high",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Declares ipcTarget but defines no custom IpcHandler/onMessage handler that parses IPC payloads into shell commands; base Panel only exposes standard open/close/toggle, like all Omarchy bar widgets. No payload validation needed, not arbitrary execution.",
+        "relatedCode": "Panel.qml:12 ipcTarget: \"io.github.sktev.mounted-drives\" — no IpcHandler/onIpcMessage in file; grep shows no ipc handler logic (only moduleName duplicate)",
+        "executableContext": "Not an executable; standard Omarchy IPC routing for bar-widget visibility control, not command execution"
+      },
+      {
+        "file": "Panel.qml",
+        "line": 52,
+        "pattern": "Util.fileUrl",
+        "originalSeverity": "medium",
+        "refinedSeverity": "info",
+        "isBenign": true,
+        "isMalicious": false,
+        "reasoning": "Qt.resolvedUrl(\"scripts/list_drives.py\") resolves a bundled helper relative to Panel.qml, not user input. Executed via Process command array [\"python3\", resolvedPath] with optional \"--include-internal\" from boolean setting; no shell interpolation and path is not attacker-controlled.",
+        "relatedCode": "Panel.qml:52 var cmd = [\"python3\", pathFromUrl(Qt.resolvedUrl(\"scripts/list_drives.py\"))] -> Panel.qml:54-55 scannerProc.command = cmd; scannerProc.running = true; Process id:scannerProc executes python3 directly",
+        "executableContext": "scripts/list_drives.py is the plugin's bundled enumerator: runs only `lsblk -J -o NAME,PATH,SIZE,FSTYPE,LABEL,MOUNTPOINTS,VENDOR,MODEL,TRAN,RM,HOTPLUG,TYPE` and `findmnt`/`lsblk -s`, filters to usb/removable/hotplug/rom (+ sata/nvme if --include-internal), excludes root/loop/zram/dm-*, emits JSON; args are static or boolean-derived, sanitized, no network/file writes"
+      }
+    ]
+  }
+}

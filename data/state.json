@@ -33,5 +33,12 @@
     "lastScannedAt": "2026-08-25T11:15:32.917Z",
     "lastRisk": "high",
     "lastScore": 19
+  },
+  "sktev-mounted-drives": {
+    "url": "https://github.com/sktev/mounted-drives",
+    "lastScanned": "aae8a8779c3220bd3003f47d47a4f9c2ad3175fe",
+    "lastScannedAt": "2026-08-30T11:00:06.674Z",
+    "lastRisk": "low",
+    "lastScore": 7
   }
 }
